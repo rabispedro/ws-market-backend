@@ -14,13 +14,15 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "tb_produto")
 public class Produto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 
@@ -30,6 +32,7 @@ public class Produto implements Serializable {
 	@Column(name = "preco")
 	private Double preco;
 
+	@JsonBackReference
 	@ManyToMany
 	@JoinTable(
 		name = "tb_produto_categoria",
