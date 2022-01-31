@@ -17,10 +17,12 @@ public class CategoriaService {
 	public Categoria findById(Long id) {
 		Optional<Categoria> categoria = this.categoriaRepository.findById(id);
 
-		return categoria.orElseThrow(() -> new ObjectNotFoundException(
-			"Objeto nao encontrado! " +
-			"Id: " + id + ", " +
-			"Tipo: " + Categoria.class.getName() + ".\n"
+		return categoria.orElseThrow(() -> (
+			new ObjectNotFoundException(
+				"Objeto nao encontrado! " +
+				"Id: " + id + ", " +
+				"Tipo: " + Categoria.class.getName() + ".\n"
+			)
 		));
 	}
 }

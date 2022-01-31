@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tb_categoria")
 public class Categoria implements Serializable {
@@ -25,9 +27,10 @@ public class Categoria implements Serializable {
 	@Column(name = "nome")
 	private String nome;
 	
+	@JsonManagedReference
 	@ManyToMany(mappedBy = "categorias")
 	@Column(name = "id_produto")
-	private List<Produto> idProduto = new ArrayList<Produto>();
+	private List<Produto> produtos = new ArrayList<Produto>();
 
 	public Categoria() {
 	}
@@ -53,17 +56,12 @@ public class Categoria implements Serializable {
 		this.nome = nome;
 	}
 
-	public List<Produto> getIdProduto() {
-		return idProduto;
+	public List<Produto> getProdutos() {
+		return produtos;
 	}
 
-	public void setIdProduto(List<Produto> idProduto) {
-		this.idProduto = idProduto;
-	}
-
-	@Override
-	public String toString() {
-		return "Categoria [id=" + id + ", idProduto=" + idProduto + ", nome=" + nome + "]";
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 
 	@Override
