@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "tb_cidade")
 public class Cidade implements Serializable {
@@ -24,6 +26,7 @@ public class Cidade implements Serializable {
 	@Column(name = "nome")
 	private String nome;
 
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "id_estado")
 	private Estado estado;
@@ -53,11 +56,11 @@ public class Cidade implements Serializable {
 		this.nome = nome;
 	}
 
-	public Estado getIdEstado() {
+	public Estado getEstado() {
 		return estado;
 	}
 
-	public void setIdEstado(Estado estado) {
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 
