@@ -21,7 +21,7 @@ public class CategoriaService {
 			new ObjectNotFoundException(
 				"Objeto nao encontrado! " +
 				"Id: " + id + ", " +
-				"Tipo: " + Categoria.class.getName() + ".\n"
+				"Tipo: " + Categoria.class.getName() + "."
 			)
 		));
 	}

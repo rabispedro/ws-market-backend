@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wsmarket.wsmarketbackend.domain.enums.TipoCliente;
 
@@ -51,6 +50,10 @@ public class Cliente implements Serializable {
 	@CollectionTable(name = "tb_telefone")
 	@Column(name = "telefones")
 	private Set<String> telefones = new HashSet<String>();
+
+	@OneToMany(mappedBy = "cliente")
+	@Column(name = "pedidos")
+	private List<Pedido> pedidos = new ArrayList<Pedido>();
 
 	public Cliente() {
 
@@ -118,6 +121,14 @@ public class Cliente implements Serializable {
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	@Override

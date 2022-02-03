@@ -1,19 +1,27 @@
 package com.wsmarket.wsmarketbackend;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import com.wsmarket.wsmarketbackend.domain.Categoria;
 import com.wsmarket.wsmarketbackend.domain.Cidade;
 import com.wsmarket.wsmarketbackend.domain.Cliente;
 import com.wsmarket.wsmarketbackend.domain.Endereco;
+import com.wsmarket.wsmarketbackend.domain.Pedido;
 import com.wsmarket.wsmarketbackend.domain.Estado;
+import com.wsmarket.wsmarketbackend.domain.Pagamento;
+import com.wsmarket.wsmarketbackend.domain.PagamentoComBoleto;
+import com.wsmarket.wsmarketbackend.domain.PagamentoComCartao;
 import com.wsmarket.wsmarketbackend.domain.Produto;
+import com.wsmarket.wsmarketbackend.domain.enums.EstadoPagamento;
 import com.wsmarket.wsmarketbackend.domain.enums.TipoCliente;
 import com.wsmarket.wsmarketbackend.repositories.CategoriaRepository;
 import com.wsmarket.wsmarketbackend.repositories.CidadeRepository;
 import com.wsmarket.wsmarketbackend.repositories.ClienteRepository;
 import com.wsmarket.wsmarketbackend.repositories.EnderecoRepository;
 import com.wsmarket.wsmarketbackend.repositories.EstadoRepository;
+import com.wsmarket.wsmarketbackend.repositories.PagamentoRepository;
+import com.wsmarket.wsmarketbackend.repositories.PedidoRepository;
 import com.wsmarket.wsmarketbackend.repositories.ProdutoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +48,12 @@ public class WsMarketBackendApplication implements CommandLineRunner {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+
+	@Autowired
+	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(WsMarketBackendApplication.class, args);
@@ -113,6 +127,47 @@ public class WsMarketBackendApplication implements CommandLineRunner {
 
 		this.clienteRepository.saveAll(Arrays.asList(cli1));
 		this.enderecoRepository.saveAll(Arrays.asList(e1, e2));
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Pedido ped1 = new Pedido(
+			null,
+			dateFormat.parse("30/09/2017 10:32"),
+			cli1,
+			e1
+		);
+
+		Pedido ped2 = new Pedido(
+			null,
+			dateFormat.parse("10/10/2020 19:35"),
+			cli1,
+			e2
+		);
+
+		Pagamento pag1 = new PagamentoComCartao(
+			null,
+			EstadoPagamento.QUITADO,
+			ped1,
+			6
+		);
+
+		ped1.setPagamento(pag1);
+
+		Pagamento pag2 = new PagamentoComBoleto(
+			null,
+			EstadoPagamento.PENDENTE,
+			ped2,
+			dateFormat.parse("20/10/2020 00:00"),
+			null
+		);
+
+		ped2.setPagamento(pag2);
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		this.pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		
+		this.pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
 
 		return;
 	}
