@@ -9,6 +9,7 @@ import com.wsmarket.wsmarketbackend.domain.Cliente;
 import com.wsmarket.wsmarketbackend.domain.Endereco;
 import com.wsmarket.wsmarketbackend.domain.Pedido;
 import com.wsmarket.wsmarketbackend.domain.Estado;
+import com.wsmarket.wsmarketbackend.domain.ItemPedido;
 import com.wsmarket.wsmarketbackend.domain.Pagamento;
 import com.wsmarket.wsmarketbackend.domain.PagamentoComBoleto;
 import com.wsmarket.wsmarketbackend.domain.PagamentoComCartao;
@@ -20,6 +21,7 @@ import com.wsmarket.wsmarketbackend.repositories.CidadeRepository;
 import com.wsmarket.wsmarketbackend.repositories.ClienteRepository;
 import com.wsmarket.wsmarketbackend.repositories.EnderecoRepository;
 import com.wsmarket.wsmarketbackend.repositories.EstadoRepository;
+import com.wsmarket.wsmarketbackend.repositories.ItemPedidoRepository;
 import com.wsmarket.wsmarketbackend.repositories.PagamentoRepository;
 import com.wsmarket.wsmarketbackend.repositories.PedidoRepository;
 import com.wsmarket.wsmarketbackend.repositories.ProdutoRepository;
@@ -54,6 +56,9 @@ public class WsMarketBackendApplication implements CommandLineRunner {
 
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(WsMarketBackendApplication.class, args);
@@ -166,8 +171,20 @@ public class WsMarketBackendApplication implements CommandLineRunner {
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 
 		this.pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
-		
 		this.pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
+
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		this.itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 
 		return;
 	}
