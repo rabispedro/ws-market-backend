@@ -30,6 +30,4 @@ public class PagamentoComCartao extends Pagamento {
 	public void setNumeroParcelas(Integer numeroParcelas) {
 		this.numeroParcelas = numeroParcelas;
 	}
-
-	
 }

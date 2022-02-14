@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wsmarket.wsmarketbackend.domain.enums.EstadoPagamento;
 
 @Entity
@@ -13,9 +14,11 @@ import com.wsmarket.wsmarketbackend.domain.enums.EstadoPagamento;
 public class PagamentoComBoleto extends Pagamento {
 	private static final long serialVersionUID = 1L;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "data_pagamento")
 	private Date dataPagamento;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "data_vencimento")
 	private Date dataVencimento;
 
