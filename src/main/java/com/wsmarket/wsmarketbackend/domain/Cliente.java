@@ -16,9 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wsmarket.wsmarketbackend.domain.enums.TipoCliente;
 
 @Entity
@@ -43,7 +41,6 @@ public class Cliente implements Serializable {
 	@Column(name = "tipo")
 	private Integer tipo;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente")
 	@Column(name = "enderecos")
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
@@ -53,8 +50,7 @@ public class Cliente implements Serializable {
 	@Column(name = "telefones")
 	private Set<String> telefones = new HashSet<String>();
 
-	//	@JsonIgnore
-	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	@Column(name = "pedidos")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
