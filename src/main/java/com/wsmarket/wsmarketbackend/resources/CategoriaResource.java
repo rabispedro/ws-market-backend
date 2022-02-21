@@ -7,6 +7,7 @@ import com.wsmarket.wsmarketbackend.services.CategoriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +24,17 @@ public class CategoriaResource {
 	private CategoriaService categoriaService;
 
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Categoria> findById(@PathVariable Long id) {
+	public ResponseEntity<Categoria> findById(
+		@PathVariable Long id
+	) {
 		Categoria categoria = this.categoriaService.findById(id);
 		return ResponseEntity.ok(categoria);
 	}
 
 	@PostMapping(path = "/")
-	public ResponseEntity<Void> create(@RequestBody Categoria categoria) {
+	public ResponseEntity<Void> create(
+		@RequestBody Categoria categoria
+	) {
 		Categoria newCategoria = this.categoriaService.create(categoria);
 		
 		URI uri = ServletUriComponentsBuilder
@@ -44,9 +49,17 @@ public class CategoriaResource {
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<Void> update(
 		@PathVariable Long id,
-		@RequestBody Categoria categoria) {
-			Categoria updatedCategoria = this.categoriaService.update(id, categoria);
-
+		@RequestBody Categoria categoria
+	) {
+			this.categoriaService.update(id, categoria);
 			return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<Void> delete(
+		@PathVariable Long id
+	) {
+		this.categoriaService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

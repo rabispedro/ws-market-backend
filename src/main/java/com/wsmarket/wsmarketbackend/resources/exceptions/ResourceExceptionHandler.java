@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.wsmarket.wsmarketbackend.services.exceptions.DataIntegrityException;
 import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
 
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,23 @@ public class ResourceExceptionHandler {
 		return ResponseEntity
 			.status(HttpStatus.NOT_FOUND)
 			.body(objectNotFoundError)
+		;
+	}
+
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> dataIntegrity(
+		DataIntegrityException error,
+		HttpServletRequest request
+	) {
+		StandardError dataIntegrity = new StandardError(
+			HttpStatus.BAD_REQUEST.value(),
+			error.getMessage(),
+			Instant.now()
+		);
+
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(dataIntegrity)
 		;
 	}
 }
