@@ -1,6 +1,6 @@
 package com.wsmarket.wsmarketbackend.resources;
 
-import com.wsmarket.wsmarketbackend.domain.Cliente;
+import com.wsmarket.wsmarketbackend.domains.Cliente;
 import com.wsmarket.wsmarketbackend.services.ClienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.wsmarket.wsmarketbackend.domain;
+package com.wsmarket.wsmarketbackend.domains;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.wsmarket.wsmarketbackend.domain.enums.EstadoPagamento;
+import com.wsmarket.wsmarketbackend.domains.enums.EstadoPagamento;
 
 @Entity
 @Table(name = "tb_pagamento_com_boleto")

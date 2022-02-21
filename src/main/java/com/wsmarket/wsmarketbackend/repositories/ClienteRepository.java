@@ -1,6 +1,6 @@
 package com.wsmarket.wsmarketbackend.repositories;
 
-import com.wsmarket.wsmarketbackend.domain.Cliente;
+import com.wsmarket.wsmarketbackend.domains.Cliente;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

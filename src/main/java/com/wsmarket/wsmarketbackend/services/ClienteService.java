@@ -2,7 +2,7 @@ package com.wsmarket.wsmarketbackend.services;
 
 import java.util.Optional;
 
-import com.wsmarket.wsmarketbackend.domain.Cliente;
+import com.wsmarket.wsmarketbackend.domains.Cliente;
 import com.wsmarket.wsmarketbackend.repositories.ClienteRepository;
 import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
 

@@ -2,10 +2,13 @@ package com.wsmarket.wsmarketbackend.resources;
 
 import java.net.URI;
 
-import com.wsmarket.wsmarketbackend.domain.Categoria;
+import com.wsmarket.wsmarketbackend.domains.Categoria;
+import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
 import com.wsmarket.wsmarketbackend.services.CategoriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,12 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
 
+	@GetMapping(path = "/")
+	public ResponseEntity<Page<CategoriaDTO>> findAll(Pageable pageable) {
+		Page<CategoriaDTO> categorias = this.categoriaService.findAll(pageable);
+		return ResponseEntity.ok(categorias);
+	}
+	
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Categoria> findById(
 		@PathVariable Long id

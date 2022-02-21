@@ -1,4 +1,4 @@
-package com.wsmarket.wsmarketbackend.domain.enums;
+package com.wsmarket.wsmarketbackend.domains.enums;
 
 public enum EstadoPagamento {
 	PENDENTE(1, "Pendente"),

@@ -1,4 +1,4 @@
-package com.wsmarket.wsmarketbackend.domain.enums;
+package com.wsmarket.wsmarketbackend.domains.enums;
 
 public enum TipoCliente {
 	PESSOA_FISICA(1, "Pessoa Fisica"),

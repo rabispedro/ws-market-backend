@@ -2,19 +2,27 @@ package com.wsmarket.wsmarketbackend.services;
 
 import java.util.Optional;
 
-import com.wsmarket.wsmarketbackend.domain.Categoria;
+import com.wsmarket.wsmarketbackend.domains.Categoria;
+import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
 import com.wsmarket.wsmarketbackend.repositories.CategoriaRepository;
 import com.wsmarket.wsmarketbackend.services.exceptions.DataIntegrityException;
 import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CategoriaService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	public Page<CategoriaDTO> findAll(Pageable pageable) {
+		Page<Categoria> categorias = this.categoriaRepository.findAll(pageable);
+		return categorias.map(categoria -> new CategoriaDTO(categoria));
+	}
 	
 	public Categoria findById(Long id) {
 		Optional<Categoria> categoria = this.categoriaRepository.findById(id);

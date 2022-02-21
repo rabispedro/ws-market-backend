@@ -1,4 +1,4 @@
-package com.wsmarket.wsmarketbackend.domain;
+package com.wsmarket.wsmarketbackend.domains;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,6 +1,6 @@
 package com.wsmarket.wsmarketbackend.resources;
 
-import com.wsmarket.wsmarketbackend.domain.Pedido;
+import com.wsmarket.wsmarketbackend.domains.Pedido;
 import com.wsmarket.wsmarketbackend.services.PedidoService;
 
 import org.springframework.beans.factory.annotation.Autowired;

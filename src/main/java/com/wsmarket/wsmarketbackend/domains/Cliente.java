@@ -1,4 +1,4 @@
-package com.wsmarket.wsmarketbackend.domain;
+package com.wsmarket.wsmarketbackend.domains;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wsmarket.wsmarketbackend.domain.enums.TipoCliente;
+import com.wsmarket.wsmarketbackend.domains.enums.TipoCliente;
 
 @Entity
 @Table(name = "tb_cliente")

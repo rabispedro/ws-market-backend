@@ -1,4 +1,4 @@
-package com.wsmarket.wsmarketbackend.domain;
+package com.wsmarket.wsmarketbackend.domains;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wsmarket.wsmarketbackend.domain.enums.EstadoPagamento;
+import com.wsmarket.wsmarketbackend.domains.enums.EstadoPagamento;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
