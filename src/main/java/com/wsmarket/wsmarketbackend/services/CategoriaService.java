@@ -31,4 +31,13 @@ public class CategoriaService {
 
 		return newCategoria;
 	}
+
+	public Categoria update(Long id, Categoria categoria) {
+		this.findById(id);
+		categoria.setId(id);
+
+		Categoria updatedCategoria = this.categoriaRepository.save(categoria);
+
+		return updatedCategoria;
+	}
 }
