@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,12 +32,28 @@ public class CategoriaResource {
 		Page<CategoriaDTO> categorias = this.categoriaService.findAll(pageable);
 		return ResponseEntity.ok(categorias);
 	}
+
+	@GetMapping(path = "/page")
+	public ResponseEntity<Page<Categoria>> findPage(
+		@RequestParam(name = "page", defaultValue = "0") Integer page,
+		@RequestParam(name = "limit", defaultValue = "24") Integer linesPerPage,
+		@RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
+		@RequestParam(name = "direction", defaultValue = "ASC") String direction
+	) {
+		Page<Categoria> categorias = this.categoriaService.findPage(
+			page,
+			linesPerPage,
+			orderBy,
+			direction
+		);
+		return ResponseEntity.ok(categorias);
+	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Categoria> findById(
+	public ResponseEntity<CategoriaDTO> findById(
 		@PathVariable Long id
 	) {
-		Categoria categoria = this.categoriaService.findById(id);
+		CategoriaDTO categoria = this.categoriaService.findById(id);
 		return ResponseEntity.ok(categoria);
 	}
 

@@ -11,7 +11,9 @@ import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,17 +25,28 @@ public class CategoriaService {
 		Page<Categoria> categorias = this.categoriaRepository.findAll(pageable);
 		return categorias.map(categoria -> new CategoriaDTO(categoria));
 	}
-	
-	public Categoria findById(Long id) {
-		Optional<Categoria> categoria = this.categoriaRepository.findById(id);
 
-		return categoria.orElseThrow(() -> (
-			new ObjectNotFoundException(
-				"Objeto nao encontrado! " +
-				"Id: " + id + ", " +
-				"Tipo: " + Categoria.class.getName() + "."
-			)
-		));
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest
+			.of(page, linesPerPage, Direction.valueOf(direction), orderBy)
+		;
+
+		Page<Categoria> categorias = this.categoriaRepository.findAll(pageRequest);
+		return categorias;
+	}
+	
+	public CategoriaDTO findById(Long id) {
+		Categoria categoria = this.categoriaRepository.findById(id)
+			.orElseThrow(() -> (
+				new ObjectNotFoundException(
+					"Objeto nao encontrado! " +
+					"Id: " + id + ", " +
+					"Tipo: " + Categoria.class.getName() + "."
+				)
+			))
+		;
+
+		return new CategoriaDTO(categoria);
 	}
 
 	public Categoria create(Categoria categoria) {
