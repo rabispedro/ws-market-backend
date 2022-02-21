@@ -25,4 +25,10 @@ public class CategoriaService {
 			)
 		));
 	}
+
+	public Categoria create(Categoria categoria) {
+		Categoria newCategoria = this.categoriaRepository.save(categoria);
+
+		return newCategoria;
+	}
 }
