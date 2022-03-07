@@ -2,6 +2,8 @@ package com.wsmarket.wsmarketbackend.resources;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
 import com.wsmarket.wsmarketbackend.services.CategoriaService;
@@ -59,9 +61,10 @@ public class CategoriaResource {
 
 	@PostMapping(path = "/")
 	public ResponseEntity<Void> create(
-		@RequestBody Categoria categoria
+		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
-		Categoria newCategoria = this.categoriaService.create(categoria);
+		Categoria newCategoria = this.categoriaService
+			.create(categoriaDto.fromDTO());
 		
 		URI uri = ServletUriComponentsBuilder
 			.fromCurrentRequest()
@@ -75,10 +78,10 @@ public class CategoriaResource {
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<Void> update(
 		@PathVariable Long id,
-		@RequestBody Categoria categoria
+		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
-			this.categoriaService.update(id, categoria);
-			return ResponseEntity.noContent().build();
+		this.categoriaService.update(id, categoriaDto.fromDTO());
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping(path = "/{id}")

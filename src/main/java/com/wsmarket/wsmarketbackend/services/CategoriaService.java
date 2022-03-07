@@ -1,7 +1,5 @@
 package com.wsmarket.wsmarketbackend.services;
 
-import java.util.Optional;
-
 import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
 import com.wsmarket.wsmarketbackend.repositories.CategoriaRepository;
