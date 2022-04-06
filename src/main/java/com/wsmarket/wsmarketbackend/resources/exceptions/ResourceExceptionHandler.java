@@ -9,6 +9,8 @@ import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -37,7 +39,7 @@ public class ResourceExceptionHandler {
 		DataIntegrityException error,
 		HttpServletRequest request
 	) {
-		StandardError dataIntegrity = new StandardError(
+		StandardError dataIntegrityError = new StandardError(
 			HttpStatus.BAD_REQUEST.value(),
 			error.getMessage(),
 			Instant.now()
@@ -45,7 +47,28 @@ public class ResourceExceptionHandler {
 
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
-			.body(dataIntegrity)
+			.body(dataIntegrityError)
+		;
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<StandardError> dataValidation(
+		MethodArgumentNotValidException error,
+		HttpServletRequest request
+	) {
+		ValidationError dataValidationError = new ValidationError(
+			HttpStatus.BAD_REQUEST.value(),
+			"Validation Error",
+			Instant.now()
+		);
+
+		for(FieldError err : error.getBindingResult().getFieldErrors()) {
+			dataValidationError.addError(err.getField(), err.getDefaultMessage());
+		}
+
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(dataValidationError)
 		;
 	}
 }

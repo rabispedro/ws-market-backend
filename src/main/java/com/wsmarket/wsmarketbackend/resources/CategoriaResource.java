@@ -29,13 +29,13 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
 
-	@GetMapping(path = "/")
+	@GetMapping(path = "")
 	public ResponseEntity<Page<CategoriaDTO>> findAll(Pageable pageable) {
 		Page<CategoriaDTO> categorias = this.categoriaService.findAll(pageable);
 		return ResponseEntity.ok(categorias);
 	}
 
-	@GetMapping(path = "/page")
+	@GetMapping(path = "/pagination")
 	public ResponseEntity<Page<Categoria>> findPage(
 		@RequestParam(name = "page", defaultValue = "0") Integer page,
 		@RequestParam(name = "limit", defaultValue = "24") Integer linesPerPage,
@@ -59,7 +59,7 @@ public class CategoriaResource {
 		return ResponseEntity.ok(categoria);
 	}
 
-	@PostMapping(path = "/")
+	@PostMapping(path = "")
 	public ResponseEntity<Void> create(
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
