@@ -4,7 +4,6 @@ import java.net.URI;
 
 import javax.validation.Valid;
 
-import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
 import com.wsmarket.wsmarketbackend.services.CategoriaService;
 
@@ -36,13 +35,13 @@ public class CategoriaResource {
 	}
 
 	@GetMapping(path = "/pagination")
-	public ResponseEntity<Page<Categoria>> findPage(
+	public ResponseEntity<Page<CategoriaDTO>> findPage(
 		@RequestParam(name = "page", defaultValue = "0") Integer page,
 		@RequestParam(name = "limit", defaultValue = "24") Integer linesPerPage,
 		@RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
 		@RequestParam(name = "direction", defaultValue = "ASC") String direction
 	) {
-		Page<Categoria> categorias = this.categoriaService.findPage(
+		Page<CategoriaDTO> categorias = this.categoriaService.findPage(
 			page,
 			linesPerPage,
 			orderBy,
@@ -63,7 +62,7 @@ public class CategoriaResource {
 	public ResponseEntity<Void> create(
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
-		Categoria newCategoria = this.categoriaService
+		CategoriaDTO newCategoria = this.categoriaService
 			.create(categoriaDto.fromDTO());
 		
 		URI uri = ServletUriComponentsBuilder
@@ -80,7 +79,8 @@ public class CategoriaResource {
 		@PathVariable Long id,
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
-		this.categoriaService.update(id, categoriaDto.fromDTO());
+		categoriaDto.setId(id);
+		this.categoriaService.update(categoriaDto.fromDTO());
 		return ResponseEntity.noContent().build();
 	}
 

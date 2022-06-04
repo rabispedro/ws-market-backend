@@ -24,13 +24,18 @@ public class CategoriaService {
 		return categorias.map(categoria -> new CategoriaDTO(categoria));
 	}
 
-	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+	public Page<CategoriaDTO> findPage(
+		Integer page,
+		Integer linesPerPage,
+		String orderBy,
+		String direction
+		) {
 		PageRequest pageRequest = PageRequest
 			.of(page, linesPerPage, Direction.valueOf(direction), orderBy)
 		;
 
 		Page<Categoria> categorias = this.categoriaRepository.findAll(pageRequest);
-		return categorias;
+		return categorias.map(categoria -> new CategoriaDTO(categoria));
 	}
 	
 	public CategoriaDTO findById(Long id) {
@@ -47,19 +52,18 @@ public class CategoriaService {
 		return new CategoriaDTO(categoria);
 	}
 
-	public Categoria create(Categoria categoria) {
+	public CategoriaDTO create(Categoria categoria) {
 		Categoria newCategoria = this.categoriaRepository.save(categoria);
 
-		return newCategoria;
+		return new CategoriaDTO(newCategoria);
 	}
 
-	public Categoria update(Long id, Categoria categoria) {
-		this.findById(id);
-		categoria.setId(id);
+	public CategoriaDTO update(Categoria categoria) {
+		this.findById(categoria.getId());
 
 		Categoria updatedCategoria = this.categoriaRepository.save(categoria);
 
-		return updatedCategoria;
+		return new CategoriaDTO(updatedCategoria);
 	}
 
 	public void delete(Long id) {

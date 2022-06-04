@@ -26,7 +26,13 @@ public class PagamentoComBoleto extends Pagamento {
 
 	}
 
-	public PagamentoComBoleto(Long id, EstadoPagamento estado, Pedido pedido, Date dataPagamento, Date dataVencimento) {
+	public PagamentoComBoleto(
+		Long id,
+		EstadoPagamento estado,
+		Pedido pedido,
+		Date dataPagamento,
+		Date dataVencimento
+	) {
 		super(id, estado, pedido);
 		this.dataPagamento = dataPagamento;
 		this.dataVencimento = dataVencimento;

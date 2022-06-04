@@ -2,15 +2,16 @@ package com.wsmarket.wsmarketbackend.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import com.wsmarket.wsmarketbackend.domains.Categoria;
+import com.wsmarket.wsmarketbackend.domains.Cliente;
 
 import org.hibernate.validator.constraints.Length;
 
-public class CategoriaDTO implements Serializable {
+public class ClienteDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	private Long id;
 
 	@NotEmpty(message = "This field is required")
@@ -21,19 +22,27 @@ public class CategoriaDTO implements Serializable {
 	)
 	private String nome;
 
-	public CategoriaDTO() {
+	@NotEmpty(message = "This field is required")
+	@Email(message = "Invalid email")
+	private String email;
+
+	public ClienteDTO() {
 
 	}
 
-	public CategoriaDTO(Categoria categoria) {
-		this.id = categoria.getId();
-		this.nome = categoria.getNome();
+	public ClienteDTO(Cliente cliente) {
+		this.id = cliente.getId();
+		this.nome = cliente.getNome();
+		this.email = cliente.getEmail();
 	}
 
-	public Categoria fromDTO() {
-		return new Categoria(
+	public Cliente fromDTO() {
+		return new Cliente(
 			this.id,
-			this.nome
+			this.nome,
+			this.email,
+			null,
+			null
 		);
 	}
 
@@ -51,5 +60,13 @@ public class CategoriaDTO implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

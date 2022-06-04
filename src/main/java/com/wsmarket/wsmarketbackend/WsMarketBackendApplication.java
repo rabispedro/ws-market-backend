@@ -85,7 +85,16 @@ public class WsMarketBackendApplication implements CommandLineRunner {
 		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
 		p3.getCategorias().addAll(Arrays.asList(cat1));
 
-		this.categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
+		this.categoriaRepository.saveAll(Arrays.asList(
+			cat1,
+			cat2,
+			cat3,
+			cat4,
+			cat5,
+			cat6,
+			cat7
+		));
+
 		this.produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 
 		Estado est1 = new Estado(null, "Minas Gerais");
@@ -138,7 +147,9 @@ public class WsMarketBackendApplication implements CommandLineRunner {
 		this.clienteRepository.saveAll(Arrays.asList(cli1));
 		this.enderecoRepository.saveAll(Arrays.asList(e1, e2));
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"dd/MM/yyyy HH:mm"
+		);
 		
 		Pedido ped1 = new Pedido(
 			null,
@@ -178,9 +189,29 @@ public class WsMarketBackendApplication implements CommandLineRunner {
 		this.pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		this.pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
 
-		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
-		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
-		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		ItemPedido ip1 = new ItemPedido(
+			ped1,
+			p1,
+			0.00,
+			1,
+			2000.00
+		);
+
+		ItemPedido ip2 = new ItemPedido(
+			ped1,
+			p3,
+			0.00,
+			2,
+			80.00
+		);
+
+		ItemPedido ip3 = new ItemPedido(
+			ped2,
+			p2,
+			100.00,
+			1,
+			800.00
+		);
 
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
 		ped2.getItens().addAll(Arrays.asList(ip3));
