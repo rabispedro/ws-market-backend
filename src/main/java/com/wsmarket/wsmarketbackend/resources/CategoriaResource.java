@@ -4,6 +4,7 @@ import java.net.URI;
 
 import javax.validation.Valid;
 
+import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
 import com.wsmarket.wsmarketbackend.services.CategoriaService;
 
@@ -51,10 +52,10 @@ public class CategoriaResource {
 	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<CategoriaDTO> findById(
+	public ResponseEntity<Categoria> findById(
 		@PathVariable Long id
 	) {
-		CategoriaDTO categoria = this.categoriaService.findById(id);
+		Categoria categoria = this.categoriaService.findById(id);
 		return ResponseEntity.ok(categoria);
 	}
 

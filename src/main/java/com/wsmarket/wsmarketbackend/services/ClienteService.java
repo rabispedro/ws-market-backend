@@ -56,7 +56,7 @@ public class ClienteService {
 
 	public ClienteDTO update(Cliente cliente) {
 		Cliente newCliente = this.findById(cliente.getId());
-		this.updateData(newCliente, cliente);
+		this.updateClienteData(newCliente, cliente);
 		Cliente updatedCliente = this.clienteRepository.save(newCliente);
 
 		return new ClienteDTO(updatedCliente);
@@ -76,7 +76,7 @@ public class ClienteService {
 		return;
 	}
 
-	private void updateData(
+	private void updateClienteData(
 		Cliente updatedClient,
 		Cliente formerClient
 	) {

@@ -38,7 +38,7 @@ public class CategoriaService {
 		return categorias.map(categoria -> new CategoriaDTO(categoria));
 	}
 	
-	public CategoriaDTO findById(Long id) {
+	public Categoria findById(Long id) {
 		Categoria categoria = this.categoriaRepository.findById(id)
 			.orElseThrow(() -> (
 				new ObjectNotFoundException(
@@ -49,7 +49,7 @@ public class CategoriaService {
 			))
 		;
 
-		return new CategoriaDTO(categoria);
+		return categoria;
 	}
 
 	public CategoriaDTO create(Categoria categoria) {
@@ -59,9 +59,9 @@ public class CategoriaService {
 	}
 
 	public CategoriaDTO update(Categoria categoria) {
-		this.findById(categoria.getId());
-
-		Categoria updatedCategoria = this.categoriaRepository.save(categoria);
+		Categoria newCategoria = this.findById(categoria.getId());
+		this.updateCategoriaData(newCategoria, categoria);
+		Categoria updatedCategoria = this.categoriaRepository.save(newCategoria);
 
 		return new CategoriaDTO(updatedCategoria);
 	}
@@ -77,6 +77,15 @@ public class CategoriaService {
 			);
 		}
 
+		return;
+	}
+
+	private void updateCategoriaData(
+		Categoria categoria,
+		Categoria formerCategoria
+	) {
+			categoria.setNome(formerCategoria.getNome());
+			categoria.setProdutos(formerCategoria.getProdutos());
 		return;
 	}
 }
