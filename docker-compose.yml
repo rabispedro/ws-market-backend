@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  postgres-db:
+    image: postgres:13.0
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ws_market
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - 5432:5432
