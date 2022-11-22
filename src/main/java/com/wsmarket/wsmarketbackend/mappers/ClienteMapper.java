@@ -83,11 +83,11 @@ public class ClienteMapper {
 		Cliente novoCliente,
 		Cliente cliente
 	) {
-		novoCliente.setId(cliente.getId() == null ? novoCliente.getId() : cliente.getId());
-		novoCliente.setNome(cliente.getNome() == null ? novoCliente.getNome() : cliente.getNome());
-		novoCliente.setEmail(cliente.getEmail() == null ? novoCliente.getEmail() : cliente.getEmail());
-		novoCliente.setCpfOuCnpj(cliente.getCpfOuCnpj() == null ? novoCliente.getCpfOuCnpj() : cliente.getCpfOuCnpj());
-		novoCliente.setTipo(cliente.getTipo() == null ? novoCliente.getTipo() : cliente.getTipo());
+		novoCliente.setId(cliente.getId() != null ? cliente.getId() : novoCliente.getId());
+		novoCliente.setNome(cliente.getNome() != null ? cliente.getNome() : novoCliente.getNome());
+		novoCliente.setEmail(cliente.getEmail() != null ? cliente.getEmail() : novoCliente.getEmail());
+		novoCliente.setCpfOuCnpj(cliente.getCpfOuCnpj() != null ? cliente.getCpfOuCnpj() : novoCliente.getCpfOuCnpj());
+		novoCliente.setTipo(cliente.getTipo() != null ? cliente.getTipo() : novoCliente.getTipo());
 
 		return novoCliente;
 	}

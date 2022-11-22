@@ -24,6 +24,7 @@ public class CategoriaService {
 	
 	public Page<CategoriaDTO> findAll(Pageable pageable) {
 		Page<Categoria> categorias = this.categoriaRepository.findAll(pageable);
+
 		return categorias.map(categoria ->  categoriaMapper.mapToCategoriaDTO(categoria));
 	}
 
@@ -34,10 +35,10 @@ public class CategoriaService {
 		String direction
 		) {
 		PageRequest pageRequest = PageRequest
-			.of(page, linesPerPage, Direction.valueOf(direction), orderBy)
-		;
+			.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 
 		Page<Categoria> categorias = this.categoriaRepository.findAll(pageRequest);
+
 		return categorias.map(categoria -> categoriaMapper.mapToCategoriaDTO(categoria));
 	}
 	
@@ -64,7 +65,7 @@ public class CategoriaService {
 
 	public CategoriaDTO update(Categoria categoria) {
 		Categoria newCategoria = this.findById(categoria.getId());
-		this.updateCategoriaData(newCategoria, categoria);
+		this.categoriaMapper.mapToNewCategoria(newCategoria, categoria);
 		Categoria updatedCategoria = this.categoriaRepository.save(newCategoria);
 
 		return categoriaMapper.mapToCategoriaDTO(updatedCategoria);
@@ -81,15 +82,6 @@ public class CategoriaService {
 			);
 		}
 
-		return;
-	}
-
-	private void updateCategoriaData(
-		Categoria categoria,
-		Categoria formerCategoria
-	) {
-			categoria.setNome(formerCategoria.getNome());
-			categoria.setProdutos(formerCategoria.getProdutos());
 		return;
 	}
 }

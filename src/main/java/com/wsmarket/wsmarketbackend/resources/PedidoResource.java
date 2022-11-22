@@ -21,6 +21,7 @@ public class PedidoResource {
 		@PathVariable Long id
 	) {
 		Pedido pedido = this.pedidoService.findById(id);
+
 		return ResponseEntity.ok(pedido);
 	}
 }

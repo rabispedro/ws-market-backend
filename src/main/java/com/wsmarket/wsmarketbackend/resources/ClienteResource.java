@@ -53,6 +53,7 @@ public class ClienteResource {
 			orderBy,
 			direction
 		);
+
 		return ResponseEntity.ok(clientes);
 	}
 
@@ -61,6 +62,7 @@ public class ClienteResource {
 		@PathVariable Long id
 	) {
 		Cliente cliente = this.clienteService.findById(id);
+
 		return ResponseEntity.ok(cliente);
 	}
 
@@ -87,6 +89,7 @@ public class ClienteResource {
 	) {
 		clienteDto.setId(id);
 		this.clienteService.update(id, clienteMapper.mapToCliente(clienteDto));
+
 		return ResponseEntity.noContent().build();
 	}
 
@@ -95,6 +98,7 @@ public class ClienteResource {
 		@PathVariable Long id
 	) {
 		this.clienteService.delete(id);
+
 		return ResponseEntity.noContent().build();
 	}
 }

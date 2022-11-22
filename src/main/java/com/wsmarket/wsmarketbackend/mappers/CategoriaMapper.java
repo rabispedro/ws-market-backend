@@ -16,10 +16,21 @@ public class CategoriaMapper {
 		);
 	}
 
-	public Categoria mapToCategoria(CategoriaDTO categoriaDTO) {
+	public Categoria mapToCategoria(CategoriaDTO categoriaDto) {
 		return new Categoria(
-			categoriaDTO.getId(),
-			categoriaDTO.getNome()
+			categoriaDto.getId(),
+			categoriaDto.getNome()
 		);
+	}
+
+	public Categoria mapToNewCategoria(
+		Categoria novaCategoria,
+		Categoria categoria
+	) {
+		novaCategoria.setId(categoria.getId() != null ? categoria.getId() : novaCategoria.getId());
+		novaCategoria.setNome(categoria.getNome() != null ? categoria.getNome() : novaCategoria.getNome());
+		novaCategoria.setProdutos(categoria.getProdutos() != null ? categoria.getProdutos() : novaCategoria.getProdutos());
+
+		return novaCategoria;
 	}
 }

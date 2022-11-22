@@ -31,7 +31,8 @@ public class ClienteService {
 
 	public Page<ClienteDTO> findAll(Pageable pageable) {
 		Page<Cliente> clientes = this.clienteRepository.findAll(pageable);
-		return clientes.map(cliente -> clienteMapper.mapToClienteDTO(cliente));
+
+		return clientes.map(cliente -> this.clienteMapper.mapToClienteDTO(cliente));
 	}
 
 	public Page<ClienteDTO> findPage(
@@ -41,11 +42,11 @@ public class ClienteService {
 		String direction
 	) {
 		PageRequest pageRequest = PageRequest
-			.of(page, linesPerPage, Direction.valueOf(direction), orderBy)
-		;
+			.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 
 		Page<Cliente> clientes = this.clienteRepository.findAll(pageRequest);
-		return clientes.map(cliente -> clienteMapper.mapToClienteDTO(cliente));
+
+		return clientes.map(cliente -> this.clienteMapper.mapToClienteDTO(cliente));
 	}
 
 	public Cliente findById(Long id) {
@@ -67,6 +68,7 @@ public class ClienteService {
 			cliente.setId(null);
 			cliente = this.clienteRepository.save(cliente);
 			this.enderecoRepository.saveAll(cliente.getEnderecos());
+
 			return this.clienteMapper.mapToClienteDTO(cliente);
 		}
 
@@ -76,7 +78,7 @@ public class ClienteService {
 		this.clienteMapper.mapToNewCliente(newCliente, cliente);
 		Cliente updatedCliente = this.clienteRepository.save(newCliente);
 
-		return clienteMapper.mapToClienteDTO(updatedCliente);
+		return this.clienteMapper.mapToClienteDTO(updatedCliente);
 	}
 
 	public void delete(Long id) {
@@ -92,6 +94,4 @@ public class ClienteService {
 
 		return;
 	}
-
-	
 }
