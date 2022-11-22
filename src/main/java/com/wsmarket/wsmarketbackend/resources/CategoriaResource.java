@@ -67,13 +67,13 @@ public class CategoriaResource {
 	public ResponseEntity<Void> create(
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
-		CategoriaDTO newCategoria = this.categoriaService
+		CategoriaDTO categoria = this.categoriaService
 			.create(categoriaMapper.mapToCategoria(categoriaDto));
 		
 		URI uri = ServletUriComponentsBuilder
 			.fromCurrentRequest()
 			.path("/{id}")
-			.buildAndExpand(newCategoria.getId())
+			.buildAndExpand(categoria.getId())
 			.toUri();
 
 		return ResponseEntity.created(uri).build();

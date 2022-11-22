@@ -56,23 +56,23 @@ public class ClienteService {
 					"Id: " + id + ", " +
 					"Tipo: " + Cliente.class.getName() + "."
 				)
-			))
-		;
+			)
+		);
 
 		return cliente;
 	}
 
 	@Transactional
-		public Cliente create(Cliente cliente) {
+		public ClienteDTO create(Cliente cliente) {
 			cliente.setId(null);
 			cliente = this.clienteRepository.save(cliente);
 			this.enderecoRepository.saveAll(cliente.getEnderecos());
-			return cliente;
+			return this.clienteMapper.mapToClienteDTO(cliente);
 		}
 
 	public ClienteDTO update(Cliente cliente) {
 		Cliente newCliente = this.findById(cliente.getId());
-		this.updateClienteData(newCliente, cliente);
+		this.clienteMapper.mapToNewCliente(newCliente, cliente);
 		Cliente updatedCliente = this.clienteRepository.save(newCliente);
 
 		return clienteMapper.mapToClienteDTO(updatedCliente);
@@ -92,12 +92,5 @@ public class ClienteService {
 		return;
 	}
 
-	private void updateClienteData(
-		Cliente updatedClient,
-		Cliente formerClient
-	) {
-		updatedClient.setNome(formerClient.getNome());
-		updatedClient.setEmail(formerClient.getEmail());
-		return;
-	}
+	
 }

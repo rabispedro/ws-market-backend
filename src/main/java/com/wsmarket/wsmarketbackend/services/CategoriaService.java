@@ -49,14 +49,14 @@ public class CategoriaService {
 					"Id: " + id + ", " +
 					"Tipo: " + Categoria.class.getName() + "."
 				)
-			))
-		;
+			)
+		);
 
 		return categoria;
 	}
 
 	public CategoriaDTO create(Categoria categoria) {
-		// categoria.setId(null);
+		categoria.setId(null);
 		Categoria newCategoria = this.categoriaRepository.save(categoria);
 
 		return categoriaMapper.mapToCategoriaDTO(newCategoria);

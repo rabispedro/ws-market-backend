@@ -1,10 +1,12 @@
 package com.wsmarket.wsmarketbackend.dtos;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public class ClienteNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
 	private String nome;
 	private String email;
 	private String cpfOuCnpj;
@@ -14,14 +16,13 @@ public class ClienteNewDTO implements Serializable {
 	private String complemento;
 	private String bairro;
 	private String cep;
-	private String telefone;
+	private Set<String> telefones;
 	private Long cidadeId;
-
-
 	public ClienteNewDTO() {
 	}
 
 	public ClienteNewDTO(
+		Long id,
 		String nome,
 		String email,
 		String cpfOuCnpj,
@@ -31,9 +32,9 @@ public class ClienteNewDTO implements Serializable {
 		String complemento,
 		String bairro,
 		String cep,
-		String telefone,
 		Long cidadeId
 	) {
+		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
@@ -43,10 +44,16 @@ public class ClienteNewDTO implements Serializable {
 		this.complemento = complemento;
 		this.bairro = bairro;
 		this.cep = cep;
-		this.telefone = telefone;
 		this.cidadeId = cidadeId;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getNome() {
 		return nome;
@@ -120,12 +127,12 @@ public class ClienteNewDTO implements Serializable {
 		this.cep = cep;
 	}
 
-	public String getTelefone() {
-		return telefone;
+	public Set<String> getTelefones() {
+		return telefones;
 	}
 
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+	public void setTelefones(Set<String> telefones) {
+		this.telefones = telefones;
 	}
 
 	public Long getCidadeId() {

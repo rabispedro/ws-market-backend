@@ -68,13 +68,13 @@ public class ClienteResource {
 	public ResponseEntity<Void> create(
 		@Valid @RequestBody ClienteNewDTO clienteNewDto
 	) {
-		Cliente newCliente = this.clienteService
-			.create(clienteMapper.mapToCliente(clienteNewDto));
+		ClienteDTO cliente = this.clienteService
+			.create(this.clienteMapper.mapToCliente(clienteNewDto));
 
 		URI uri = ServletUriComponentsBuilder
 			.fromCurrentRequest()
 			.path("/{id}")
-			.buildAndExpand(newCliente.getId())
+			.buildAndExpand(cliente.getId())
 			.toUri();
 
 		return ResponseEntity.created(uri).build();
