@@ -1,7 +1,5 @@
 package com.wsmarket.wsmarketbackend.resources;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

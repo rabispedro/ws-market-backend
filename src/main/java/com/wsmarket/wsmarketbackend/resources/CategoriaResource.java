@@ -68,7 +68,7 @@ public class CategoriaResource {
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
 		CategoriaDTO categoria = this.categoriaService
-			.create(categoriaMapper.mapToCategoria(categoriaDto));
+			.create(this.categoriaMapper.mapToCategoria(categoriaDto));
 		
 		URI uri = ServletUriComponentsBuilder
 			.fromCurrentRequest()
@@ -85,7 +85,7 @@ public class CategoriaResource {
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
 		categoriaDto.setId(id);
-		this.categoriaService.update(categoriaMapper.mapToCategoria(categoriaDto));
+		this.categoriaService.update(this.categoriaMapper.mapToCategoria(categoriaDto));
 		return ResponseEntity.noContent().build();
 	}
 
