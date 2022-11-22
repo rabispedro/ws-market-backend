@@ -3,21 +3,54 @@ package com.wsmarket.wsmarketbackend.dtos;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.wsmarket.wsmarketbackend.services.validations.ClienteNew;
+
+@ClienteNew
 public class ClienteNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+	
+	@NotEmpty(message = "This field is required")
+	@Length(
+		min = 3,
+		max = 80,
+		message = "This field must contain between 3 and 80 characters"
+	)
 	private String nome;
+	
+	@NotEmpty(message = "This field is required")
+	@Email(message = "Invalid email")
 	private String email;
+	
+	@NotEmpty(message = "This field is required")
 	private String cpfOuCnpj;
+
 	private Integer tipo;
+	
+	@NotEmpty(message = "This field is required")
 	private String logradouro;
+	
+	@NotEmpty(message = "This field is required")
 	private String numero;
+	
 	private String complemento;
+	
 	private String bairro;
+	
+	@NotEmpty(message = "This field is required")
 	private String cep;
+	
+	@NotEmpty(message = "This field is required")
 	private Set<String> telefones;
+	
 	private Long cidadeId;
+	
 	public ClienteNewDTO() {
 	}
 
