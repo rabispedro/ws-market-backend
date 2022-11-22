@@ -70,8 +70,9 @@ public class ClienteService {
 			return this.clienteMapper.mapToClienteDTO(cliente);
 		}
 
-	public ClienteDTO update(Cliente cliente) {
-		Cliente newCliente = this.findById(cliente.getId());
+	public ClienteDTO update(Long id, Cliente cliente) {
+		cliente.setId(null);
+		Cliente newCliente = this.findById(id);
 		this.clienteMapper.mapToNewCliente(newCliente, cliente);
 		Cliente updatedCliente = this.clienteRepository.save(newCliente);
 

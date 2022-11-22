@@ -86,7 +86,7 @@ public class ClienteResource {
 		@Valid @RequestBody ClienteDTO clienteDto
 	) {
 		clienteDto.setId(id);
-		this.clienteService.update(clienteMapper.mapToCliente(clienteDto));
+		this.clienteService.update(id, clienteMapper.mapToCliente(clienteDto));
 		return ResponseEntity.noContent().build();
 	}
 

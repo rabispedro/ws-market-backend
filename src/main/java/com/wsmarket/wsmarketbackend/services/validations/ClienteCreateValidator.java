@@ -16,12 +16,12 @@ import com.wsmarket.wsmarketbackend.repositories.ClienteRepository;
 import com.wsmarket.wsmarketbackend.resources.exceptions.FieldMessage;
 import com.wsmarket.wsmarketbackend.services.validations.utils.DocumentUtil;
 
-public class ClienteNewValidador implements ConstraintValidator<ClienteNew, ClienteNewDTO> {
+public class ClienteCreateValidator implements ConstraintValidator<ClienteCreate, ClienteNewDTO> {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
 	@Override
-	public void initialize(ClienteNew ann) {
+	public void initialize(ClienteCreate ann) {
 	}
 
 	@Override
