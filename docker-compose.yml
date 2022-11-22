@@ -1,7 +1,32 @@
 version: "3"
 
 services:
-  postgres-db:
+  # postgres-dev:
+  #   container_name: db-dev
+  #   image: postgres:13.0
+  #   volumes:
+  #     - ./postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_DB: ws_market_dev
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: dev123
+  #   ports:
+  #     - 5432:5432
+
+  # postgres-hml:
+  #   container_name: db-hml
+  #   image: postgres:13.0
+  #   volumes:
+  #     - ./postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_DB: ws_market_homologation
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: hml123
+  #   ports:
+  #     - 5432:5432
+
+  postgres-prd:
+    container_name: db-prd
     image: postgres:13.0
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
@@ -11,3 +36,19 @@ services:
       POSTGRES_PASSWORD: admin
     ports:
       - 5432:5432
+
+
+
+# version: "3"
+
+# services:
+#   postgres-db:
+#     image: postgres:13.0
+#     volumes:
+#       - ./postgres_data:/var/lib/postgresql/data
+#     environment:
+#       POSTGRES_DB: ws_market
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: admin
+#     ports:
+#       - 5432:5432
