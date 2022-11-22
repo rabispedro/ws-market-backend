@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotEmpty;
 
-import com.wsmarket.wsmarketbackend.domains.Categoria;
-
 import org.hibernate.validator.constraints.Length;
 
 public class CategoriaDTO implements Serializable {
@@ -22,19 +20,11 @@ public class CategoriaDTO implements Serializable {
 	private String nome;
 
 	public CategoriaDTO() {
-
 	}
 
-	public CategoriaDTO(Categoria categoria) {
-		this.id = categoria.getId();
-		this.nome = categoria.getNome();
-	}
-
-	public Categoria fromDTO() {
-		return new Categoria(
-			this.id,
-			this.nome
-		);
+	public CategoriaDTO(Long id, String nome) {
+		this.id = id;
+		this.nome = nome;
 	}
 
 	public Long getId() {

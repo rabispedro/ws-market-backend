@@ -2,6 +2,7 @@ package com.wsmarket.wsmarketbackend.services;
 
 import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
+import com.wsmarket.wsmarketbackend.mappers.CategoriaMapper;
 import com.wsmarket.wsmarketbackend.repositories.CategoriaRepository;
 import com.wsmarket.wsmarketbackend.services.exceptions.DataIntegrityException;
 import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
@@ -18,10 +19,12 @@ import org.springframework.stereotype.Service;
 public class CategoriaService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+
+	@Autowired CategoriaMapper categoriaMapper;
 	
 	public Page<CategoriaDTO> findAll(Pageable pageable) {
 		Page<Categoria> categorias = this.categoriaRepository.findAll(pageable);
-		return categorias.map(categoria -> new CategoriaDTO(categoria));
+		return categorias.map(categoria ->  categoriaMapper.mapToCategoriaDTO(categoria));
 	}
 
 	public Page<CategoriaDTO> findPage(
@@ -35,7 +38,7 @@ public class CategoriaService {
 		;
 
 		Page<Categoria> categorias = this.categoriaRepository.findAll(pageRequest);
-		return categorias.map(categoria -> new CategoriaDTO(categoria));
+		return categorias.map(categoria -> categoriaMapper.mapToCategoriaDTO(categoria));
 	}
 	
 	public Categoria findById(Long id) {
@@ -53,9 +56,10 @@ public class CategoriaService {
 	}
 
 	public CategoriaDTO create(Categoria categoria) {
+		// categoria.setId(null);
 		Categoria newCategoria = this.categoriaRepository.save(categoria);
 
-		return new CategoriaDTO(newCategoria);
+		return categoriaMapper.mapToCategoriaDTO(newCategoria);
 	}
 
 	public CategoriaDTO update(Categoria categoria) {
@@ -63,7 +67,7 @@ public class CategoriaService {
 		this.updateCategoriaData(newCategoria, categoria);
 		Categoria updatedCategoria = this.categoriaRepository.save(newCategoria);
 
-		return new CategoriaDTO(updatedCategoria);
+		return categoriaMapper.mapToCategoriaDTO(updatedCategoria);
 	}
 
 	public void delete(Long id) {

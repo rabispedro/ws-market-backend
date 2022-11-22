@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
+import com.wsmarket.wsmarketbackend.mappers.CategoriaMapper;
 import com.wsmarket.wsmarketbackend.services.CategoriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
+
+	@Autowired
+	private CategoriaMapper categoriaMapper;
 
 	@GetMapping(path = "")
 	public ResponseEntity<Page<CategoriaDTO>> findAll(Pageable pageable) {
@@ -64,7 +68,7 @@ public class CategoriaResource {
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
 		CategoriaDTO newCategoria = this.categoriaService
-			.create(categoriaDto.fromDTO());
+			.create(categoriaMapper.mapToCategoria(categoriaDto));
 		
 		URI uri = ServletUriComponentsBuilder
 			.fromCurrentRequest()
@@ -81,7 +85,7 @@ public class CategoriaResource {
 		@Valid @RequestBody CategoriaDTO categoriaDto
 	) {
 		categoriaDto.setId(id);
-		this.categoriaService.update(categoriaDto.fromDTO());
+		this.categoriaService.update(categoriaMapper.mapToCategoria(categoriaDto));
 		return ResponseEntity.noContent().build();
 	}
 

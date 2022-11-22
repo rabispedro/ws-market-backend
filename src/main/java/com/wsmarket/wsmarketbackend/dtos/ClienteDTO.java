@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import com.wsmarket.wsmarketbackend.domains.Cliente;
-
 import org.hibernate.validator.constraints.Length;
 
 public class ClienteDTO implements Serializable {
@@ -27,23 +25,12 @@ public class ClienteDTO implements Serializable {
 	private String email;
 
 	public ClienteDTO() {
-
 	}
 
-	public ClienteDTO(Cliente cliente) {
-		this.id = cliente.getId();
-		this.nome = cliente.getNome();
-		this.email = cliente.getEmail();
-	}
-
-	public Cliente fromDTO() {
-		return new Cliente(
-			this.id,
-			this.nome,
-			this.email,
-			null,
-			null
-		);
+	public ClienteDTO(Long id, String nome, String email) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
 	}
 
 	public Long getId() {
