@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.wsmarket.wsmarketbackend.services.DatabaseService;
+import com.wsmarket.wsmarketbackend.services.SmtpEmailService;
+import com.wsmarket.wsmarketbackend.services.interfaces.EmailService;
 
 @Configuration
 @Profile("prd")
@@ -16,7 +18,7 @@ public class ProdEnvironmentConfig {
 	
 	@Value("${spring.jpa.hibernate.ddl-auto}")
 	private String strategy;
-	
+
 	@Bean
 	public boolean instantiateDatabase() throws Exception {
 		if(!strategy.equals("create")) {
@@ -26,5 +28,10 @@ public class ProdEnvironmentConfig {
 		this.databaseService.instantiateTestDatabase();
 		
 		return true;
+	}
+
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 }
