@@ -1,8 +1,11 @@
 package com.wsmarket.wsmarketbackend.domains;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -145,4 +148,36 @@ public class Pedido implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		NumberFormat currencyFormatter = NumberFormat
+			.getCurrencyInstance(new Locale("pt", "BR"));
+
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+
+		StringBuilder builder = new StringBuilder()
+			.append("Pedido número: ")
+			.append(this.getId())
+			.append(", Instante: ")
+			.append(dateFormatter.format(this.getInstante()))
+			.append(", Cliente: ")
+			.append(this.getCliente().getNome())
+			.append(", Status do pagamento: ")
+			.append(this.getPagamento().getEstado().getDescricao())
+			.append("\nDetalhes:\n");
+		
+		for(ItemPedido item : this.getItens()){
+			builder.append(item.toString());
+		}
+		
+		builder
+			.append("Valor total: ")
+			.append(currencyFormatter.format(this.getTotal()))
+			.append("\n");
+
+		return builder.toString();
+	}
+
+	
 }

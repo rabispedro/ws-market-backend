@@ -1,6 +1,8 @@
 package com.wsmarket.wsmarketbackend.domains;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -121,5 +123,23 @@ public class ItemPedido implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat currencyFormatter = NumberFormat
+			.getCurrencyInstance(new Locale("pt", "BR"));
+
+		StringBuilder builder = new StringBuilder()
+			.append(this.getProduto().getNome())
+			.append(", Quantidade: ")
+			.append(this.getQuantidade())
+			.append(", Preço unitário: ")
+			.append(currencyFormatter.format(this.getPreco()))
+			.append(", Subtotal: ")
+			.append(currencyFormatter.format(this.getSubTotal()))
+			.append("\n");
+
+		return builder.toString();
 	}
 }
