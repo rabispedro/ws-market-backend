@@ -15,7 +15,7 @@ public class DevEnvironmentConfig {
 	
 	@Bean
 	public boolean instantiateDatabase() throws Exception {
-		this.databaseService.instantiateTestDatabase();
+		// this.databaseService.instantiateTestDatabase();
 
 		return true;
 	}
