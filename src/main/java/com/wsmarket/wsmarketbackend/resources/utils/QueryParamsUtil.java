@@ -13,7 +13,10 @@ public class QueryParamsUtil {
 	) {
 		String[] splitedList = list.split(separator);
 
-		return Arrays.asList(splitedList).stream().map(item -> Long.parseLong(item)).collect(Collectors.toList());
+		return Arrays.asList(splitedList)
+			.stream()
+			.map(item -> Long.parseLong(item))
+			.collect(Collectors.toList());
 	}
 
 	public static String decodeQueryParam(

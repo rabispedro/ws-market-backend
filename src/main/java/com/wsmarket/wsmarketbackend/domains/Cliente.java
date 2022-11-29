@@ -154,7 +154,10 @@ public class Cliente implements Serializable {
 	}
 
 	public Set<PerfilCliente> getPerfis() {
-		return this.perfis.stream().map(perfil -> PerfilCliente.toEnum(perfil)).collect(Collectors.toSet());
+		return this.perfis
+			.stream()
+			.map(perfil -> PerfilCliente.toEnum(perfil))
+			.collect(Collectors.toSet());
 	}
 
 	public void addPerfil(PerfilCliente perfil) {
