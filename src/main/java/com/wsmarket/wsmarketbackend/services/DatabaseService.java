@@ -19,6 +19,7 @@ import com.wsmarket.wsmarketbackend.domains.PagamentoComCartao;
 import com.wsmarket.wsmarketbackend.domains.Pedido;
 import com.wsmarket.wsmarketbackend.domains.Produto;
 import com.wsmarket.wsmarketbackend.domains.enums.EstadoPagamento;
+import com.wsmarket.wsmarketbackend.domains.enums.PerfilCliente;
 import com.wsmarket.wsmarketbackend.domains.enums.TipoCliente;
 import com.wsmarket.wsmarketbackend.repositories.CategoriaRepository;
 import com.wsmarket.wsmarketbackend.repositories.CidadeRepository;
@@ -142,6 +143,16 @@ public class DatabaseService {
 
 		Cliente cli1 = new Cliente(
 			null,
+			"Pedro Diniz",
+			"pedrodiniz@arpiatecnologia.com",
+			"61989698000",
+			TipoCliente.PESSOA_FISICA,
+			this.bCryptPasswordEncoder.encode("Arroba123")
+		);
+		cli1.addPerfil(PerfilCliente.ADMIN);
+
+		Cliente cli2 = new Cliente(
+			null,
 			"Maria Silva",
 			"maria@gmail.com",
 			"36378912377",
@@ -149,7 +160,8 @@ public class DatabaseService {
 			this.bCryptPasswordEncoder.encode("Arroba123")
 		);
 
-		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+		cli1.getTelefones().addAll(Arrays.asList("38933922827"));
+		cli2.getTelefones().addAll(Arrays.asList("31927363323", "85993838393"));
 
 		Endereco e1 = new Endereco(
 			null,
@@ -173,10 +185,22 @@ public class DatabaseService {
 			c2
 		);
 
-		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		Endereco e3 = new Endereco(
+			null,
+			"Rua Continental",
+			"22",
+			"Casa Fundo",
+			"Areias",
+			"64027686",
+			cli2,
+			c3
+		);
 
-		this.clienteRepository.saveAll(Arrays.asList(cli1));
-		this.enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
+
+		this.clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		this.enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm"

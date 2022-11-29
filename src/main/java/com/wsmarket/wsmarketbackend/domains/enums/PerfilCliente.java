@@ -1,14 +1,13 @@
 package com.wsmarket.wsmarketbackend.domains.enums;
 
-public enum EstadoPagamento {
-	PENDENTE(1, "Pendente"),
-	QUITADO(2, "Quitado"),
-	CANCELADO(3, "Cancelado");
+public enum PerfilCliente {
+	ADMIN(1, "ROLE_ADMIN"),
+	CLIENTE(2, "ROLE_CLIENTE");
 
 	private Integer codigo;
 	private String descricao;
 	
-	private EstadoPagamento(Integer codigo, String descricao) {
+	private PerfilCliente(Integer codigo, String descricao) {
 		this.codigo = codigo;
 		this.descricao = descricao;
 	}
@@ -21,14 +20,14 @@ public enum EstadoPagamento {
 		return descricao;
 	}
 
-	public static EstadoPagamento toEnum(Integer codigo) {
+	public static PerfilCliente toEnum(Integer codigo) {
 		if(codigo == null) {
 			return null;
 		}
 
-		for(EstadoPagamento estado : EstadoPagamento.values()) {
-			if(codigo.equals(estado.getCodigo())) {
-				return estado;
+		for(PerfilCliente perfil : PerfilCliente.values()) {
+			if(codigo.equals(perfil.getCodigo())) {
+				return perfil;
 			}
 		}
 
