@@ -32,6 +32,9 @@ public class ClienteNewDTO implements Serializable {
 	private String cpfOuCnpj;
 
 	private Integer tipo;
+
+	@NotEmpty(message = "This field is required")
+	private String senha;
 	
 	@NotEmpty(message = "This field is required")
 	private String logradouro;
@@ -60,6 +63,7 @@ public class ClienteNewDTO implements Serializable {
 		String email,
 		String cpfOuCnpj,
 		Integer tipo,
+		String senha,
 		String logradouro,
 		String numero,
 		String complemento,
@@ -72,6 +76,7 @@ public class ClienteNewDTO implements Serializable {
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = tipo;
+		this.senha = senha;
 		this.logradouro = logradouro;
 		this.numero = numero;
 		this.complemento = complemento;
@@ -118,6 +123,14 @@ public class ClienteNewDTO implements Serializable {
 
 	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getSenha() {
+		return this.senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public String getLogradouro() {

@@ -1,6 +1,8 @@
 package com.wsmarket.wsmarketbackend.mappers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.wsmarket.wsmarketbackend.domains.Cidade;
@@ -13,11 +15,15 @@ import com.wsmarket.wsmarketbackend.dtos.ClienteNewDTO;
 @Component
 @Scope("singleton")
 public class ClienteMapper {
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	public Cliente mapToCliente(ClienteDTO clienteDto) {
 		return new Cliente(
 			clienteDto.getId(),
 			clienteDto.getNome(),
 			clienteDto.getEmail(),
+			null,
 			null,
 			null
 		);
@@ -37,7 +43,8 @@ public class ClienteMapper {
 			clienteNewDto.getNome(),
 			clienteNewDto.getEmail(),
 			clienteNewDto.getCpfOuCnpj(),
-			TipoCliente.toEnum(clienteNewDto.getTipo())
+			TipoCliente.toEnum(clienteNewDto.getTipo()),
+			this.bCryptPasswordEncoder.encode(clienteNewDto.getSenha())
 		);
 
 		Cidade cidade = new Cidade(
@@ -70,6 +77,7 @@ public class ClienteMapper {
 			cliente.getEmail(),
 			cliente.getCpfOuCnpj(),
 			cliente.getTipo().getCodigo(),
+			null,
 			cliente.getEnderecos().get(cliente.getEnderecos().size() - 1).getLogradouro(),
 			cliente.getEnderecos().get(cliente.getEnderecos().size() - 1).getNumero(),
 			cliente.getEnderecos().get(cliente.getEnderecos().size() - 1).getComplemento(),
