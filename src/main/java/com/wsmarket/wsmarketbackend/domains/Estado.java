@@ -1,11 +1,9 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,11 +12,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
 @Table(name = "tb_estado")
-public class Estado implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public class Estado extends BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -30,15 +25,11 @@ public class Estado implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "estado")
 	@Column(name = "cidades")
-	private List<Cidade> cidades = new ArrayList<Cidade>();
+	private List<Cidade> cidades = new ArrayList<>();
 
-	public Estado() {
-	}
+	public Estado() {}
 
-	public Estado(
-		Long id,
-		String nome
-	) {
+	public Estado(Long id, String nome) {
 		this.id = id;
 		this.nome = nome;
 	}

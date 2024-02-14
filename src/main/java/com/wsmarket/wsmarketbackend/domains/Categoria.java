@@ -1,22 +1,17 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-@Entity
 @Table(name = "tb_categoria")
-public class Categoria implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class Categoria extends BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -27,15 +22,11 @@ public class Categoria implements Serializable {
 	
 	@ManyToMany(mappedBy = "categorias")
 	@Column(name = "id_produto")
-	private List<Produto> produtos = new ArrayList<Produto>();
+	private List<Produto> produtos = new ArrayList<>();
 
-	public Categoria() {
-	}
+	public Categoria() {}
 
-	public Categoria(
-		Long id,
-		String nome
-	) {
+	public Categoria(Long id, String nome) {
 		this.id = id;
 		this.nome = nome;
 	}

@@ -1,6 +1,5 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +9,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,11 +20,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Entity
 @Table(name = "tb_pedido")
-public class Pedido implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class Pedido extends BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -49,11 +44,9 @@ public class Pedido implements Serializable {
 
 	@OneToMany(mappedBy = "id.pedido")
 	@Column(name = "itens")
-	private Set<ItemPedido> itens = new HashSet<ItemPedido>();
+	private Set<ItemPedido> itens = new HashSet<>();
 
-	public Pedido() {
-	
-	}
+	public Pedido() {}
 
 	public Pedido(
 		Long id,

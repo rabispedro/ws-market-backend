@@ -1,6 +1,5 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +10,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,11 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wsmarket.wsmarketbackend.domains.enums.PerfilCliente;
 import com.wsmarket.wsmarketbackend.domains.enums.TipoCliente;
 
-@Entity
 @Table(name = "tb_cliente")
-public class Cliente implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public class Cliente extends BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -51,22 +46,22 @@ public class Cliente implements Serializable {
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	@Column(name = "enderecos")
-	private List<Endereco> enderecos = new ArrayList<Endereco>();
+	private List<Endereco> enderecos = new ArrayList<>();
 
 	@ElementCollection
 	@CollectionTable(name = "tb_telefone")
 	@Column(name = "telefones")
-	private Set<String> telefones = new HashSet<String>();
+	private Set<String> telefones = new HashSet<>();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "tb_cliente_perfil")
 	@Column(name = "perfil")
-	private Set<Integer> perfis = new HashSet<Integer>();
+	private Set<Integer> perfis = new HashSet<>();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	@Column(name = "pedidos")
-	private List<Pedido> pedidos = new ArrayList<Pedido>();
+	private List<Pedido> pedidos = new ArrayList<>();
 
 	public Cliente() {
 		this.addPerfil(PerfilCliente.CLIENTE);
@@ -75,7 +70,7 @@ public class Cliente implements Serializable {
 	public Cliente(
 		Long id,
 		String nome,
-		String email,
+		String email, 
 		String cpfOuCnpj,
 		TipoCliente tipo,
 		String senha
@@ -156,7 +151,7 @@ public class Cliente implements Serializable {
 	public Set<PerfilCliente> getPerfis() {
 		return this.perfis
 			.stream()
-			.map(perfil -> PerfilCliente.toEnum(perfil))
+			.map(PerfilCliente::toEnum)
 			.collect(Collectors.toSet());
 	}
 

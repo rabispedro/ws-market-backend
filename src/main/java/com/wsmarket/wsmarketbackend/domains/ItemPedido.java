@@ -1,21 +1,16 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
 @Table(name = "tb_item_pedido")
-public class ItemPedido implements Serializable {
-	private static final long serialVersionUID = 1L;
-
+public class ItemPedido extends BaseDomain {
 	@JsonIgnore
 	@EmbeddedId
 	@Column(name = "id")
@@ -30,8 +25,7 @@ public class ItemPedido implements Serializable {
 	@Column(name = "preco")
 	private Double preco;
 
-	public ItemPedido() {
-	}
+	public ItemPedido() {}
 
 	public ItemPedido(
 		Pedido pedido,

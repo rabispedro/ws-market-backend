@@ -1,9 +1,6 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,11 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
 @Table(name = "tb_cidade")
-public class Cidade implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public class Cidade extends BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -28,14 +22,9 @@ public class Cidade implements Serializable {
 	@JoinColumn(name = "id_estado")
 	private Estado estado;
 
-	public Cidade() {
-	}
+	public Cidade() {}
 
-	public Cidade(
-		Long id,
-		String nome,
-		Estado estado
-	) {
+	public Cidade(Long id, String nome, Estado estado) {
 		this.id = id;
 		this.nome = nome;
 		this.estado = estado;

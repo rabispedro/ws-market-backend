@@ -1,13 +1,11 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,11 +17,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
 @Table(name = "tb_produto")
-public class Produto implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public class Produto extends BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -43,21 +38,16 @@ public class Produto implements Serializable {
 		inverseJoinColumns = @JoinColumn(name = "id_categoria")
 	)
 	@Column(name = "categorias")
-	private List<Categoria> categorias = new ArrayList<Categoria>();
+	private List<Categoria> categorias = new ArrayList<>();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "id.produto")
 	@Column(name = "itens")
-	private Set<ItemPedido> itens = new HashSet<ItemPedido>();
+	private Set<ItemPedido> itens = new HashSet<>();
 
-	public Produto() {
-	}
+	public Produto() {}
 
-	public Produto(
-		Long id,
-		String nome,
-		Double preco
-	) {
+	public Produto(Long id, String nome, Double preco) {
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
@@ -65,7 +55,7 @@ public class Produto implements Serializable {
 
 	@JsonIgnore
 	public List<Pedido> getPedidos() {
-		List<Pedido> pedidos = new ArrayList<Pedido>();
+		List<Pedido> pedidos = new ArrayList<>();
 
 		for(ItemPedido item : this.itens) {
 			pedidos.add(item.getPedido());
