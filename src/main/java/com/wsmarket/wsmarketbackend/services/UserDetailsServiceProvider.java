@@ -12,24 +12,27 @@ import com.wsmarket.wsmarketbackend.security.UserSpringSecurity;
 
 @Service
 public class UserDetailsServiceProvider implements UserDetailsService {
-	@Autowired
-	private ClienteRepository clienteRepository;
+	private final ClienteRepository _clienteRepository;
+
+	public UserDetailsServiceProvider(
+		@Autowired ClienteRepository clienteRepository) {
+		_clienteRepository = clienteRepository;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(
 		String email
 	) throws UsernameNotFoundException {
-		Cliente cliente = this.clienteRepository.findByEmail(email);
+		Cliente cliente = _clienteRepository.findByEmail(email);
 		if(cliente == null) {
 			throw new UsernameNotFoundException(email);
 		}
 
-		UserSpringSecurity userSpringSecurity = new UserSpringSecurity(
+		return new UserSpringSecurity(
 			cliente.getId(),
 			cliente.getEmail(),
 			cliente.getSenha(),
 			cliente.getPerfis()
 		);
-		return userSpringSecurity;
 	}
 }

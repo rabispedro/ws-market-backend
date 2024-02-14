@@ -12,29 +12,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.wsmarket.wsmarketbackend.domains.Cliente;
-import com.wsmarket.wsmarketbackend.dtos.ClienteDTO;
+import com.wsmarket.wsmarketbackend.dtos.ClienteDto;
 import com.wsmarket.wsmarketbackend.repositories.ClienteRepository;
 import com.wsmarket.wsmarketbackend.resources.exceptions.FieldMessage;
 
-public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDTO> {
-	@Autowired
-	private HttpServletRequest httpServletRequest;
-	
-	@Autowired
-	private ClienteRepository clienteRepository;
+public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDto> {
+	private final HttpServletRequest _httpServletRequest;
+	private final ClienteRepository _clienteRepository;
 
-	@Override
-	public void initialize(ClienteUpdate clienteUpdate) {
+	public ClienteUpdateValidator(
+		@Autowired HttpServletRequest httpServletRequest,
+		@Autowired ClienteRepository clienteRepository
+	) {
+		_httpServletRequest = httpServletRequest;
+		_clienteRepository = clienteRepository;
 	}
 
 	@Override
-	public boolean isValid(ClienteDTO clienteDTO, ConstraintValidatorContext context) {
-		List<FieldMessage> errorList = new ArrayList<FieldMessage>();
+	public void initialize(ClienteUpdate clienteUpdate) throws UnsupportedOperationException {}
 
-		Map<String, String> requestMap = (Map<String, String>) this.httpServletRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+	@Override
+	public boolean isValid(ClienteDto clienteDTO, ConstraintValidatorContext context) {
+		List<FieldMessage> errorList = new ArrayList<>();
+
+		Map<String, String> requestMap = (Map<String, String>) _httpServletRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 		Long urlId = Long.parseLong(requestMap.get("id"));
 
-		Cliente cliente = this.clienteRepository.findByEmail(clienteDTO.getEmail());
+		Cliente cliente = _clienteRepository.findByEmail(clienteDTO.email());
 
 		if(
 			cliente != null &&

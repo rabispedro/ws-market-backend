@@ -1,13 +1,14 @@
 package com.wsmarket.wsmarketbackend.services;
 
 import com.wsmarket.wsmarketbackend.domains.Cliente;
-import com.wsmarket.wsmarketbackend.dtos.ClienteDTO;
+import com.wsmarket.wsmarketbackend.dtos.ClienteDto;
 import com.wsmarket.wsmarketbackend.mappers.ClienteMapper;
+import com.wsmarket.wsmarketbackend.mappers.interfaces.IClienteMapper;
 import com.wsmarket.wsmarketbackend.repositories.ClienteRepository;
 import com.wsmarket.wsmarketbackend.repositories.EnderecoRepository;
 import com.wsmarket.wsmarketbackend.services.exceptions.DataIntegrityException;
 import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
-
+import com.wsmarket.wsmarketbackend.services.interfaces.IClienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,83 +16,74 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class ClienteService {
-	@Autowired
-	private ClienteRepository clienteRepository;
+public class ClienteService extends BaseService implements IClienteService {
+	private final ClienteRepository _clienteRepository;
+	private final EnderecoRepository _enderecoRepository;
+	private final IClienteMapper _clienteMapper;
 
-	@Autowired
-	private EnderecoRepository enderecoRepository;
-
-	@Autowired
-	private ClienteMapper clienteMapper;
-
-	public Page<ClienteDTO> findAll(Pageable pageable) {
-		Page<Cliente> clientes = this.clienteRepository.findAll(pageable);
-
-		return clientes.map(cliente -> this.clienteMapper.mapToClienteDTO(cliente));
+	public ClienteService(
+		@Autowired ClienteRepository clienteRepository,
+		@Autowired EnderecoRepository enderecoRepository,
+		@Autowired ClienteMapper clienteMapper
+	) {
+		_clienteRepository = clienteRepository;
+		_enderecoRepository = enderecoRepository;
+		_clienteMapper = clienteMapper;
 	}
 
-	public Page<ClienteDTO> findPage(
-		Integer page,
-		Integer linesPerPage,
-		String orderBy,
-		String direction
-	) {
+	public Page<ClienteDto> findAll(Pageable pageable) {
+		Page<Cliente> clientes = _clienteRepository.findAll(pageable);
+
+		return clientes.map(_clienteMapper::mapToClienteDto);
+	}
+
+	public Page<ClienteDto> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest
 			.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 
-		Page<Cliente> clientes = this.clienteRepository.findAll(pageRequest);
+		Page<Cliente> clientes = _clienteRepository.findAll(pageRequest);
 
-		return clientes.map(cliente -> this.clienteMapper.mapToClienteDTO(cliente));
+		return clientes.map(_clienteMapper::mapToClienteDto);
 	}
 
 	public Cliente findById(Long id) {
-		Cliente cliente = this.clienteRepository.findById(id)
+		return _clienteRepository.findById(id)
 			.orElseThrow(() -> (
 				new ObjectNotFoundException(
 					"Objeto não encontrado! " +
 					"Id: " + id + ", " +
-					"Tipo: " + Cliente.class.getName() + "."
-				)
-			)
-		);
-
-		return cliente;
+					"Tipo: " + Cliente.class.getName() + ".")));
 	}
 
 	@Transactional
-		public ClienteDTO create(Cliente cliente) {
-			cliente.setId(null);
-			cliente = this.clienteRepository.save(cliente);
-			this.enderecoRepository.saveAll(cliente.getEnderecos());
+	public ClienteDto create(Cliente cliente) {
+		cliente.setId(null);
+		cliente = _clienteRepository.save(cliente);
+		_enderecoRepository.saveAll(cliente.getEnderecos());
 
-			return this.clienteMapper.mapToClienteDTO(cliente);
-		}
+		return _clienteMapper.mapToClienteDto(cliente);
+	}
 
-	public ClienteDTO update(Long id, Cliente cliente) {
+	public ClienteDto update(Long id, Cliente cliente) {
 		cliente.setId(null);
 		Cliente newCliente = this.findById(id);
-		this.clienteMapper.mapToNewCliente(newCliente, cliente);
-		Cliente updatedCliente = this.clienteRepository.save(newCliente);
+		_clienteMapper.mapToNewCliente(newCliente, cliente);
+		Cliente updatedCliente = _clienteRepository.save(newCliente);
 
-		return this.clienteMapper.mapToClienteDTO(updatedCliente);
+		return _clienteMapper.mapToClienteDto(updatedCliente);
 	}
 
 	public void delete(Long id) {
 		this.findById(id);
 
 		try {
-			this.clienteRepository.deleteById(id);
+			_clienteRepository.deleteById(id);
 		} catch (DataIntegrityViolationException exception) {
 			throw new DataIntegrityException(
 				"It's not possible to delete a 'Cliente' with relations."
 			);
 		}
-
-		return;
 	}
 }

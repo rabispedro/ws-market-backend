@@ -1,9 +1,6 @@
 package com.wsmarket.wsmarketbackend.domains;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -16,13 +13,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.wsmarket.wsmarketbackend.domains.enums.EstadoPagamento;
 
-@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "tb_pagamento")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-public abstract class Pagamento implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public abstract class Pagamento extends BaseDomain {
 	@Id
 	@Column(name = "id")
 	private Long id;
@@ -36,14 +30,9 @@ public abstract class Pagamento implements Serializable {
 	@MapsId
 	private Pedido pedido;
 
-	public Pagamento() {
-	}
+	protected Pagamento() {}
 
-	public Pagamento(
-		Long id,
-		EstadoPagamento estado,
-		Pedido pedido
-	) {
+	protected Pagamento(Long id, EstadoPagamento estado, Pedido pedido) {
 		this.id = id;
 		this.estado = (estado == null) ? null : estado.getCodigo();
 		this.pedido = pedido;

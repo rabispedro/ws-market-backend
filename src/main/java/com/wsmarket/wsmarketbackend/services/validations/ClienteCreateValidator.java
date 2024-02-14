@@ -11,38 +11,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.wsmarket.wsmarketbackend.domains.Cliente;
 import com.wsmarket.wsmarketbackend.domains.enums.TipoCliente;
-import com.wsmarket.wsmarketbackend.dtos.ClienteNewDTO;
+import com.wsmarket.wsmarketbackend.dtos.ClienteNewDto;
 import com.wsmarket.wsmarketbackend.repositories.ClienteRepository;
 import com.wsmarket.wsmarketbackend.resources.exceptions.FieldMessage;
 import com.wsmarket.wsmarketbackend.services.validations.utils.DocumentUtil;
 
-public class ClienteCreateValidator implements ConstraintValidator<ClienteCreate, ClienteNewDTO> {
-	@Autowired
-	private ClienteRepository clienteRepository;
+public class ClienteCreateValidator implements ConstraintValidator<ClienteCreate, ClienteNewDto> {
+	private final ClienteRepository _clienteRepository;
 	
+	public ClienteCreateValidator(
+		@Autowired ClienteRepository clienteRepository
+	) {
+		_clienteRepository = clienteRepository;
+	}
+
 	@Override
 	public void initialize(ClienteCreate ann) {
 	}
 
 	@Override
-	public boolean isValid(ClienteNewDTO clienteNewDto, ConstraintValidatorContext context) {
-		List<FieldMessage> errorList = new ArrayList<FieldMessage>();
+	public boolean isValid(ClienteNewDto clienteNewDto, ConstraintValidatorContext context) {
+		List<FieldMessage> errorList = new ArrayList<>();
 
 		if(
-			clienteNewDto.getTipo().equals(TipoCliente.PESSOA_FISICA.getCodigo()) &&
-			!DocumentUtil.isValidCPF(clienteNewDto.getCpfOuCnpj())
+			clienteNewDto.tipo().equals(TipoCliente.PESSOA_FISICA.getCodigo()) &&
+			!DocumentUtil.isValidCPF(clienteNewDto.cpfOuCnpj())
 		) {
 			errorList.add(new FieldMessage("cpfOuCnpj", "Invalid CPF"));
 		}
 
 		if(
-			clienteNewDto.getTipo().equals(TipoCliente.PESSOA_JURIDICA.getCodigo()) &&
-			!DocumentUtil.isValidCNPJ(clienteNewDto.getCpfOuCnpj())
+			clienteNewDto.tipo().equals(TipoCliente.PESSOA_JURIDICA.getCodigo()) &&
+			!DocumentUtil.isValidCNPJ(clienteNewDto.cpfOuCnpj())
 		) {
 			errorList.add(new FieldMessage("cpfOuCnpj", "Invalid CNPJ"));
 		}
 
-		Cliente cliente = this.clienteRepository.findByEmail(clienteNewDto.getEmail());
+		Cliente cliente = _clienteRepository.findByEmail(clienteNewDto.email());
 
 		if(cliente != null) {
 			errorList.add(new FieldMessage("email", "Email already exists"));

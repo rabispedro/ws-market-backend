@@ -12,25 +12,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.domains.Produto;
-import com.wsmarket.wsmarketbackend.dtos.ProdutoDTO;
+import com.wsmarket.wsmarketbackend.dtos.ProdutoDto;
 import com.wsmarket.wsmarketbackend.mappers.ProdutoMapper;
+import com.wsmarket.wsmarketbackend.mappers.interfaces.IProdutoMapper;
 import com.wsmarket.wsmarketbackend.repositories.CategoriaRepository;
 import com.wsmarket.wsmarketbackend.repositories.ProdutoRepository;
 import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
+import com.wsmarket.wsmarketbackend.services.interfaces.IProdutoService;
 
-@Service
-public class ProdutoService {
-	@Autowired
-	private ProdutoRepository produtoRepository;
+public class ProdutoService extends BaseService implements IProdutoService {
+	private final ProdutoRepository _produtoRepository;
+	private final CategoriaRepository _categoriaRepository;
+	private final IProdutoMapper _produtoMapper;
 
-	@Autowired
-	private CategoriaRepository categoriaRepository;
-
-	@Autowired
-	private ProdutoMapper produtoMapper;
+	public ProdutoService(
+		@Autowired ProdutoRepository produtoRepository,
+		@Autowired CategoriaRepository categoriaRepository,
+		@Autowired IProdutoMapper produtoMapper
+	) {
+		_produtoRepository = produtoRepository;
+		_categoriaRepository = categoriaRepository;
+		_produtoMapper = produtoMapper;
+	}
 
 	@Transactional
-	public Page<ProdutoDTO> search(
+	public Page<ProdutoDto> search(
 		String nome,
 		List<Long> ids,
 		Integer page,
@@ -41,21 +47,19 @@ public class ProdutoService {
 		PageRequest pageRequest = PageRequest
 			.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 
-		List<Categoria> categorias = this.categoriaRepository.findAllById(ids);
-		Page<Produto> produtos = this.produtoRepository.search(nome, categorias, pageRequest);
+		List<Categoria> categorias = _categoriaRepository.findAllById(ids);
+		Page<Produto> produtos = _produtoRepository.search(nome, categorias, pageRequest);
 
-		return produtos.map(produto -> this.produtoMapper.mapToProdutoDTO(produto));
+		return produtos.map(_produtoMapper::mapToProdutoDto);
 	}
 
 	public Produto findById(Long id) {
-		Optional<Produto> produto = this.produtoRepository.findById(id);
+		Optional<Produto> produto = _produtoRepository.findById(id);
 
 		return produto.orElseThrow(() -> (
 			new ObjectNotFoundException(
 				"Objeto não encontrado! " +
 				"Id: " + id + ", " +
-				"Tipo: " + Produto.class.getTypeName() + "."
-			)
-		));
+				"Tipo: " + Produto.class.getTypeName() + ".")));
 	}
 }

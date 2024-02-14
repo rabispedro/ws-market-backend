@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import com.wsmarket.wsmarketbackend.domains.Categoria;
 import com.wsmarket.wsmarketbackend.domains.Cidade;
@@ -30,39 +29,44 @@ import com.wsmarket.wsmarketbackend.repositories.ItemPedidoRepository;
 import com.wsmarket.wsmarketbackend.repositories.PagamentoRepository;
 import com.wsmarket.wsmarketbackend.repositories.PedidoRepository;
 import com.wsmarket.wsmarketbackend.repositories.ProdutoRepository;
+import com.wsmarket.wsmarketbackend.services.interfaces.IDatabaseService;
 
-@Service
-public class DatabaseService {
-	@Autowired
-	private CategoriaRepository categoriaRepository;
-
-	@Autowired
-	private ProdutoRepository produtoRepository;
-
-	@Autowired
-	private EstadoRepository estadoRepository;
-
-	@Autowired
-	private CidadeRepository cidadeRepository;
-
-	@Autowired
-	private ClienteRepository clienteRepository;
-
-	@Autowired
-	private EnderecoRepository enderecoRepository;
-
-	@Autowired
-	private PedidoRepository pedidoRepository;
-
-	@Autowired
-	private PagamentoRepository pagamentoRepository;
-
-	@Autowired
-	private ItemPedidoRepository itemPedidoRepository;
-
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+public class DatabaseService extends BaseService implements IDatabaseService {
+	private final CategoriaRepository _categoriaRepository;
+	private final ProdutoRepository _produtoRepository;
+	private final EstadoRepository _estadoRepository;
+	private final CidadeRepository _cidadeRepository;
+	private final ClienteRepository _clienteRepository;
+	private final EnderecoRepository _enderecoRepository;
+	private final PedidoRepository _pedidoRepository;
+	private final PagamentoRepository _pagamentoRepository;
+	private final ItemPedidoRepository _itemPedidoRepository;
+	private final BCryptPasswordEncoder _bCryptPasswordEncoder;
 	
+	public DatabaseService(
+		@Autowired CategoriaRepository categoriaRepository,
+		@Autowired ProdutoRepository produtoRepository,
+		@Autowired EstadoRepository estadoRepository,
+		@Autowired CidadeRepository cidadeRepository,
+		@Autowired ClienteRepository clienteRepository,
+		@Autowired EnderecoRepository enderecoRepository,
+		@Autowired PedidoRepository pedidoRepository,
+		@Autowired PagamentoRepository pagamentoRepository,
+		@Autowired ItemPedidoRepository itemPedidoRepository,
+		@Autowired BCryptPasswordEncoder bCryptPasswordEncoder
+	) {
+		_categoriaRepository = categoriaRepository;
+		_produtoRepository = produtoRepository;
+		_estadoRepository = estadoRepository;
+		_cidadeRepository = cidadeRepository;
+		_clienteRepository = clienteRepository;
+		_enderecoRepository = enderecoRepository;
+		_pedidoRepository = pedidoRepository;
+		_pagamentoRepository = pagamentoRepository;
+		_itemPedidoRepository = itemPedidoRepository;
+		_bCryptPasswordEncoder = bCryptPasswordEncoder;
+	}
+
 	public void instantiateTestDatabase() throws Exception {
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
@@ -104,29 +108,9 @@ public class DatabaseService {
 		p10.getCategorias().addAll(Arrays.asList(cat6));
 		p11.getCategorias().addAll(Arrays.asList(cat7));
 
-		this.categoriaRepository.saveAll(Arrays.asList(
-			cat1,
-			cat2,
-			cat3,
-			cat4,
-			cat5,
-			cat6,
-			cat7
-		));
+		_categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 
-		this.produtoRepository.saveAll(Arrays.asList(
-			p1,
-			p2,
-			p3,
-			p4,
-			p5,
-			p6,
-			p7,
-			p8,
-			p9,
-			p10,
-			p11
-		));
+		_produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
 
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");
@@ -138,8 +122,8 @@ public class DatabaseService {
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
 
-		this.estadoRepository.saveAll(Arrays.asList(est1, est2));
-		this.cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+		_estadoRepository.saveAll(Arrays.asList(est1, est2));
+		_cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
 		Cliente cli1 = new Cliente(
 			null,
@@ -147,7 +131,7 @@ public class DatabaseService {
 			"pedrodiniz@arpiatecnologia.com",
 			"61989698000",
 			TipoCliente.PESSOA_FISICA,
-			this.bCryptPasswordEncoder.encode("Arroba123")
+			_bCryptPasswordEncoder.encode("Arroba123")
 		);
 		cli1.addPerfil(PerfilCliente.ADMIN);
 
@@ -157,7 +141,7 @@ public class DatabaseService {
 			"maria@gmail.com",
 			"36378912377",
 			TipoCliente.PESSOA_FISICA,
-			this.bCryptPasswordEncoder.encode("Arroba123")
+			_bCryptPasswordEncoder.encode("Arroba123")
 		);
 
 		cli1.getTelefones().addAll(Arrays.asList("38933922827"));
@@ -199,8 +183,8 @@ public class DatabaseService {
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-		this.clienteRepository.saveAll(Arrays.asList(cli1, cli2));
-		this.enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
+		_clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		_enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd/MM/yyyy HH:mm"
@@ -241,8 +225,8 @@ public class DatabaseService {
 
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 
-		this.pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
-		this.pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
+		_pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		_pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
 
 		ItemPedido ip1 = new ItemPedido(
 			ped1,
@@ -275,8 +259,6 @@ public class DatabaseService {
 		p2.getItens().addAll(Arrays.asList(ip3));
 		p3.getItens().addAll(Arrays.asList(ip2));
 
-		this.itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
-
-		return;
+		_itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 }

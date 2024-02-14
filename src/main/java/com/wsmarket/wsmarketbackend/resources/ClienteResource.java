@@ -5,10 +5,10 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import com.wsmarket.wsmarketbackend.domains.Cliente;
-import com.wsmarket.wsmarketbackend.dtos.ClienteDTO;
-import com.wsmarket.wsmarketbackend.dtos.ClienteNewDTO;
-import com.wsmarket.wsmarketbackend.mappers.ClienteMapper;
-import com.wsmarket.wsmarketbackend.services.ClienteService;
+import com.wsmarket.wsmarketbackend.dtos.ClienteDto;
+import com.wsmarket.wsmarketbackend.dtos.ClienteNewDto;
+import com.wsmarket.wsmarketbackend.mappers.interfaces.IClienteMapper;
+import com.wsmarket.wsmarketbackend.services.interfaces.IClienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -22,61 +22,49 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@RestController
 @RequestMapping(path = "/clientes")
-public class ClienteResource {
-	@Autowired
-	private ClienteService clienteService;
+public class ClienteResource extends BaseResource {
+	private final IClienteService _clienteService;
+	private final IClienteMapper _clienteMapper;
 
-	@Autowired
-	private ClienteMapper clienteMapper;
+	public ClienteResource(
+		@Autowired IClienteService clienteService,
+		@Autowired IClienteMapper clienteMapper
+	) {
+		_clienteService = clienteService;
+		_clienteMapper = clienteMapper;
+	}
 
 	@GetMapping(path = "")
-	public ResponseEntity<Page<ClienteDTO>> findAll(Pageable pageable) {
-		Page<ClienteDTO> clientes = this.clienteService.findAll(pageable);
-		return ResponseEntity.ok(clientes);
+	public ResponseEntity<Page<ClienteDto>> findAll(Pageable pageable) {
+		return ResponseEntity.ok(_clienteService.findAll(pageable));
 	}
 	
 	@GetMapping(path = "/pagination")
-	public ResponseEntity<Page<ClienteDTO>> findPage(
+	public ResponseEntity<Page<ClienteDto>> findPage(
 		@RequestParam(name = "page", defaultValue = "0") Integer page,
 		@RequestParam(name = "limit", defaultValue = "24") Integer linesPerPage,
 		@RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
 		@RequestParam(name = "direction", defaultValue = "ASC") String direction
 	) {
-		Page<ClienteDTO> clientes = this.clienteService.findPage(
-			page,
-			linesPerPage,
-			orderBy,
-			direction
-		);
-
-		return ResponseEntity.ok(clientes);
+		return ResponseEntity.ok(_clienteService.findPage(page, linesPerPage, orderBy, direction));
 	}
 
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Cliente> findById(
-		@PathVariable Long id
-	) {
-		Cliente cliente = this.clienteService.findById(id);
-
-		return ResponseEntity.ok(cliente);
+	public ResponseEntity<Cliente> findById(@PathVariable Long id) {
+		return ResponseEntity.ok(_clienteService.findById(id));
 	}
 
 	@PostMapping(path = "")
-	public ResponseEntity<Void> create(
-		@Valid @RequestBody ClienteNewDTO clienteNewDto
-	) {
-		ClienteDTO cliente = this.clienteService
-			.create(this.clienteMapper.mapToCliente(clienteNewDto));
+	public ResponseEntity<Void> create(@Valid @RequestBody ClienteNewDto clienteNewDto) {
+		ClienteDto cliente = _clienteService.create(_clienteMapper.mapToCliente(clienteNewDto));
 
 		URI uri = ServletUriComponentsBuilder
 			.fromCurrentRequest()
 			.path("/{id}")
-			.buildAndExpand(cliente.getId())
+			.buildAndExpand(cliente.id())
 			.toUri();
 
 		return ResponseEntity.created(uri).build();
@@ -85,20 +73,15 @@ public class ClienteResource {
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<Void> update(
 		@PathVariable Long id,
-		@Valid @RequestBody ClienteDTO clienteDto
+		@Valid @RequestBody ClienteDto clienteDto
 	) {
-		clienteDto.setId(id);
-		this.clienteService.update(id, clienteMapper.mapToCliente(clienteDto));
-
+		_clienteService.update(id, _clienteMapper.mapToCliente(clienteDto));
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<Void> delete(
-		@PathVariable Long id
-	) {
-		this.clienteService.delete(id);
-
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		_clienteService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 }

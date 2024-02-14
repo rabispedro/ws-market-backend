@@ -3,19 +3,15 @@ package com.wsmarket.wsmarketbackend.domains;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.wsmarket.wsmarketbackend.domains.enums.EstadoPagamento;
 
-@Entity
 @Table(name = "tb_pagamento_com_boleto")
 @JsonTypeName("pagamentoComBoleto")
 public class PagamentoComBoleto extends Pagamento {
-	private static final long serialVersionUID = 1L;
-	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "data_pagamento")
 	private Date dataPagamento;
@@ -24,9 +20,7 @@ public class PagamentoComBoleto extends Pagamento {
 	@Column(name = "data_vencimento")
 	private Date dataVencimento;
 
-	public PagamentoComBoleto() {
-
-	}
+	public PagamentoComBoleto() {}
 
 	public PagamentoComBoleto(
 		Long id,
@@ -54,5 +48,36 @@ public class PagamentoComBoleto extends Pagamento {
 
 	public void setDataVencimento(Date dataVencimento) {
 		this.dataVencimento = dataVencimento;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((dataPagamento == null) ? 0 : dataPagamento.hashCode());
+		result = prime * result + ((dataVencimento == null) ? 0 : dataVencimento.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PagamentoComBoleto other = (PagamentoComBoleto) obj;
+		if (dataPagamento == null) {
+			if (other.dataPagamento != null)
+				return false;
+		} else if (!dataPagamento.equals(other.dataPagamento))
+			return false;
+		if (dataVencimento == null) {
+			if (other.dataVencimento != null)
+				return false;
+		} else if (!dataVencimento.equals(other.dataVencimento))
+			return false;
+		return true;
 	}
 }

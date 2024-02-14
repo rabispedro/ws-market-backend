@@ -1,11 +1,12 @@
 package com.wsmarket.wsmarketbackend.services;
 
 import com.wsmarket.wsmarketbackend.domains.Categoria;
-import com.wsmarket.wsmarketbackend.dtos.CategoriaDTO;
-import com.wsmarket.wsmarketbackend.mappers.CategoriaMapper;
+import com.wsmarket.wsmarketbackend.dtos.CategoriaDto;
+import com.wsmarket.wsmarketbackend.mappers.interfaces.ICategoriaMapper;
 import com.wsmarket.wsmarketbackend.repositories.CategoriaRepository;
 import com.wsmarket.wsmarketbackend.services.exceptions.DataIntegrityException;
 import com.wsmarket.wsmarketbackend.services.exceptions.ObjectNotFoundException;
+import com.wsmarket.wsmarketbackend.services.interfaces.ICategoriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,75 +14,73 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
 
-@Service
-public class CategoriaService {
-	@Autowired
-	private CategoriaRepository categoriaRepository;
+public class CategoriaService extends BaseService implements ICategoriaService {
+	private final CategoriaRepository _categoriaRepository;
+	private final ICategoriaMapper _categoriaMapper;
 
-	@Autowired CategoriaMapper categoriaMapper;
+	public CategoriaService(
+		@Autowired CategoriaRepository categoriaRepository,
+		@Autowired ICategoriaMapper categoriaMapper
+	) {
+		_categoriaRepository = categoriaRepository;
+		_categoriaMapper = categoriaMapper;
+	}
 	
-	public Page<CategoriaDTO> findAll(Pageable pageable) {
-		Page<Categoria> categorias = this.categoriaRepository.findAll(pageable);
+	public Page<CategoriaDto> findAll(Pageable pageable) {
+		Page<Categoria> categorias = _categoriaRepository.findAll(pageable);
 
-		return categorias.map(categoria ->  categoriaMapper.mapToCategoriaDTO(categoria));
+		return categorias.map(_categoriaMapper::mapToCategoriaDto);
 	}
 
-	public Page<CategoriaDTO> findPage(
+	public Page<CategoriaDto> findPage(
 		Integer page,
 		Integer linesPerPage,
 		String orderBy,
-		String direction
-		) {
+		String direction) {
 		PageRequest pageRequest = PageRequest
 			.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 
-		Page<Categoria> categorias = this.categoriaRepository.findAll(pageRequest);
+		Page<Categoria> categorias = _categoriaRepository.findAll(pageRequest);
 
-		return categorias.map(categoria -> categoriaMapper.mapToCategoriaDTO(categoria));
+		return categorias.map(_categoriaMapper::mapToCategoriaDto);
 	}
 	
 	public Categoria findById(Long id) {
-		Categoria categoria = this.categoriaRepository.findById(id)
+		Categoria categoria = _categoriaRepository.findById(id)
 			.orElseThrow(() -> (
 				new ObjectNotFoundException(
 					"Objeto nao encontrado! " +
 					"Id: " + id + ", " +
-					"Tipo: " + Categoria.class.getName() + "."
-				)
-			)
-		);
+					"Tipo: " + Categoria.class.getName() + ".")));
 
 		return categoria;
 	}
 
-	public CategoriaDTO create(Categoria categoria) {
+	public CategoriaDto create(Categoria categoria) {
 		categoria.setId(null);
-		Categoria newCategoria = this.categoriaRepository.save(categoria);
+		Categoria newCategoria = _categoriaRepository.save(categoria);
 
-		return categoriaMapper.mapToCategoriaDTO(newCategoria);
+		return _categoriaMapper.mapToCategoriaDto(newCategoria);
 	}
 
-	public CategoriaDTO update(Categoria categoria) {
+	public CategoriaDto update(Categoria categoria) {
 		Categoria newCategoria = this.findById(categoria.getId());
-		this.categoriaMapper.mapToNewCategoria(newCategoria, categoria);
-		Categoria updatedCategoria = this.categoriaRepository.save(newCategoria);
+		_categoriaMapper.mapToNewCategoria(newCategoria, categoria);
+		Categoria updatedCategoria = _categoriaRepository.save(newCategoria);
 
-		return categoriaMapper.mapToCategoriaDTO(updatedCategoria);
+		return _categoriaMapper.mapToCategoriaDto(updatedCategoria);
 	}
 
 	public void delete(Long id) {
 		this.findById(id);
 
 		try {
-			this.categoriaRepository.deleteById(id);
+			_categoriaRepository.deleteById(id);
 		} catch (DataIntegrityViolationException exception) {
 			throw new DataIntegrityException(
 				"It's not possible to delete a 'Categoria' with relations."
 			);
 		}
-
-		return;
 	}
 }

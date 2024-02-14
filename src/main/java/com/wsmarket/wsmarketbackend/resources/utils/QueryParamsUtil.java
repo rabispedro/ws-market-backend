@@ -7,21 +7,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class QueryParamsUtil {
-	public static List<Long> decodeListBySeparator(
-		String list,
-		String separator
-	) {
+	public static List<Long> decodeListBySeparator(String list,String separator) {
 		String[] splitedList = list.split(separator);
 
 		return Arrays.asList(splitedList)
 			.stream()
-			.map(item -> Long.parseLong(item))
+			.map(Long::parseLong)
 			.collect(Collectors.toList());
 	}
 
-	public static String decodeQueryParam(
-		String queryParam
-	) {
+	public static String decodeQueryParam(String queryParam) {
 		try {
 			return URLDecoder.decode(queryParam, "UTF-8");
 		} catch (UnsupportedEncodingException e) {

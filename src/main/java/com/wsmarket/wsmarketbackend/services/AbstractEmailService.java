@@ -2,7 +2,6 @@ package com.wsmarket.wsmarketbackend.services;
 
 import java.util.Date;
 
-import javax.el.ELException;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -15,14 +14,19 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.wsmarket.wsmarketbackend.domains.Pedido;
-import com.wsmarket.wsmarketbackend.services.interfaces.EmailService;
+import com.wsmarket.wsmarketbackend.services.interfaces.IEmailService;
 
-public abstract class AbstractEmailService implements EmailService {
-	@Autowired
-	private TemplateEngine templateEngine;
+public abstract class AbstractEmailService implements IEmailService {
+	private final TemplateEngine _templateEngine;
+	private final JavaMailSender _javaMailSender;
 
-	@Autowired
-	private JavaMailSender javaMailSender;
+	protected AbstractEmailService(
+		@Autowired TemplateEngine templateEngine,
+		@Autowired JavaMailSender javaMailSender
+	) {
+		_templateEngine = templateEngine;
+		_javaMailSender = javaMailSender;
+	}
 	
 	@Value("${default.sender}")
 	private String sender;
@@ -56,7 +60,7 @@ public abstract class AbstractEmailService implements EmailService {
 	}
 
 	protected MimeMessage hydrateMimeMessageFromPedido(Pedido pedido) throws MessagingException {
-		MimeMessage message = this.javaMailSender.createMimeMessage();
+		MimeMessage message = _javaMailSender.createMimeMessage();
 		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
 
 		messageHelper.setTo(pedido.getCliente().getEmail());
@@ -72,6 +76,6 @@ public abstract class AbstractEmailService implements EmailService {
 		Context context = new Context();
 		context.setVariable("pedido", pedido);
 
-		return this.templateEngine.process("email/confirmacaoPedido", context);
+		return _templateEngine.process("email/confirmacaoPedido", context);
 	}
 }

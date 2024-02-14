@@ -6,7 +6,7 @@ import org.springframework.mail.SimpleMailMessage;
 
 import com.wsmarket.wsmarketbackend.domains.Pedido;
 
-public interface EmailService {
+public interface IEmailService {
 	void sendOrderConfirmationEmail(Pedido pedido);
 	void sendEmail(SimpleMailMessage message);
 	void sendOrderConfirmationHtmlEmail(Pedido peddo);

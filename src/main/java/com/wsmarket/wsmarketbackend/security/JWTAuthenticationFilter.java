@@ -20,12 +20,11 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wsmarket.wsmarketbackend.dtos.CredenciaisDTO;
+import com.wsmarket.wsmarketbackend.dtos.CredenciaisDto;
 import com.wsmarket.wsmarketbackend.security.utils.JWTUtil;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private AuthenticationManager authenticationManager;
-
 	private JWTUtil jwtUtil;
 
 	public JWTAuthenticationFilter(
@@ -43,17 +42,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		HttpServletResponse response
 	) throws AuthenticationException {
 		try {
-			CredenciaisDTO credentialsDto = new ObjectMapper()
-				.readValue(request.getInputStream(), CredenciaisDTO.class);
+			CredenciaisDto credentialsDto = new ObjectMapper()
+				.readValue(request.getInputStream(), CredenciaisDto.class);
 
-				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-					credentialsDto.getEmail(),
-					credentialsDto.getSenha(),
-					new ArrayList<GrantedAuthority>()
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+					credentialsDto.email(),
+					credentialsDto.senha(),
+					new ArrayList<>()
 				);
 
-				Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
-				return authentication;
+			return this.authenticationManager.authenticate(authenticationToken);
 		} catch(IOException exception) {
 			throw new RuntimeException(exception);
 		}

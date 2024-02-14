@@ -18,8 +18,7 @@ public class UserSpringSecurity implements UserDetails {
 	private String senha;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserSpringSecurity(){
-	}
+	public UserSpringSecurity() {}
 	
 	public UserSpringSecurity(
 		Long id,

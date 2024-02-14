@@ -9,30 +9,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.wsmarket.wsmarketbackend.domains.Produto;
-import com.wsmarket.wsmarketbackend.dtos.ProdutoDTO;
+import com.wsmarket.wsmarketbackend.dtos.ProdutoDto;
 import com.wsmarket.wsmarketbackend.resources.utils.QueryParamsUtil;
-import com.wsmarket.wsmarketbackend.services.ProdutoService;
+import com.wsmarket.wsmarketbackend.services.interfaces.IProdutoService;
 
-@RestController
 @RequestMapping(path = "/produtos")
-public class ProdutoResource {
-	@Autowired
-	private ProdutoService produtoService;
+public class ProdutoResource extends BaseResource {
+	private final IProdutoService _produtoService;
+
+	public ProdutoResource(
+		@Autowired IProdutoService produtoService
+	) {
+		_produtoService = produtoService;
+	}
 
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Produto> findById(
-		@Valid @PathVariable Long id
-	) {
-		Produto produto = this.produtoService.findById(id);
-
-		return ResponseEntity.ok(produto);
+	public ResponseEntity<Produto> findById(@Valid @PathVariable Long id) {
+		return ResponseEntity.ok(_produtoService.findById(id));
 	}
 
 	@GetMapping(path = "/pagination")
-	public ResponseEntity<Page<ProdutoDTO>> findPage(
+	public ResponseEntity<Page<ProdutoDto>> findPage(
 		@RequestParam(name = "nome", defaultValue = "") String nome,
 		@RequestParam(name = "categorias", defaultValue = "") String categorias,
 		@RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -40,16 +39,13 @@ public class ProdutoResource {
 		@RequestParam(name = "orderBy", defaultValue = "nome") String orderBy,
 		@RequestParam(name = "direction", defaultValue = "ASC") String direction
 	) {
-		Page<ProdutoDTO> produtos = this.produtoService.search(
+		return ResponseEntity.ok(_produtoService.search(
 			QueryParamsUtil.decodeQueryParam(nome),
 			QueryParamsUtil.decodeListBySeparator(categorias, ","),
 			page,
 			linesPerPage,
 			orderBy,
 			direction
-		);
-
-		return ResponseEntity.ok(produtos);
+		));
 	}
-
 }

@@ -1,77 +1,75 @@
 package com.wsmarket.wsmarketbackend.mappers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import com.wsmarket.wsmarketbackend.domains.Cidade;
 import com.wsmarket.wsmarketbackend.domains.Cliente;
 import com.wsmarket.wsmarketbackend.domains.Endereco;
 import com.wsmarket.wsmarketbackend.domains.enums.TipoCliente;
-import com.wsmarket.wsmarketbackend.dtos.ClienteDTO;
-import com.wsmarket.wsmarketbackend.dtos.ClienteNewDTO;
+import com.wsmarket.wsmarketbackend.dtos.ClienteDto;
+import com.wsmarket.wsmarketbackend.dtos.ClienteNewDto;
+import com.wsmarket.wsmarketbackend.mappers.interfaces.IClienteMapper;
 
-@Component
-@Scope("singleton")
-public class ClienteMapper {
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+public class ClienteMapper extends BaseMapper implements IClienteMapper {
+	private final BCryptPasswordEncoder _bCryptPasswordEncoder;
+
+	public ClienteMapper(
+		@Autowired BCryptPasswordEncoder bCryptPasswordEncoder
+	) {
+		_bCryptPasswordEncoder = bCryptPasswordEncoder;
+	}
 	
-	public Cliente mapToCliente(ClienteDTO clienteDto) {
+	public Cliente mapToCliente(ClienteDto clienteDto) {
 		return new Cliente(
-			clienteDto.getId(),
-			clienteDto.getNome(),
-			clienteDto.getEmail(),
+			clienteDto.id(),
+			clienteDto.nome(),
+			clienteDto.email(),
 			null,
 			null,
 			null
 		);
 	}
 
-	public ClienteDTO mapToClienteDTO(Cliente cliente) {
-		return new ClienteDTO(
-			cliente.getId(),
-			cliente.getNome(),
-			cliente.getEmail()
-		);
+	public ClienteDto mapToClienteDto(Cliente cliente) {
+		return new ClienteDto(cliente.getId(), cliente.getNome(), cliente.getEmail());
 	}
 
-	public Cliente mapToCliente(ClienteNewDTO clienteNewDto) {
+	public Cliente mapToCliente(ClienteNewDto clienteNewDto) {
 		Cliente cliente = new Cliente(
-			clienteNewDto.getId(),
-			clienteNewDto.getNome(),
-			clienteNewDto.getEmail(),
-			clienteNewDto.getCpfOuCnpj(),
-			TipoCliente.toEnum(clienteNewDto.getTipo()),
-			this.bCryptPasswordEncoder.encode(clienteNewDto.getSenha())
+			clienteNewDto.id(),
+			clienteNewDto.nome(),
+			clienteNewDto.email(),
+			clienteNewDto.cpfOuCnpj(),
+			TipoCliente.toEnum(clienteNewDto.tipo()),
+			_bCryptPasswordEncoder.encode(clienteNewDto.senha())
 		);
 
 		Cidade cidade = new Cidade(
-			clienteNewDto.getCidadeId(),
+			clienteNewDto.cidadeId(),
 			null,
 			null
 		);
 
 		Endereco endereco = new Endereco(
 			null,
-			clienteNewDto.getLogradouro(),
-			clienteNewDto.getNumero(),
-			clienteNewDto.getComplemento(),
-			clienteNewDto.getBairro(),
-			clienteNewDto.getCep(),
+			clienteNewDto.logradouro(),
+			clienteNewDto.numero(),
+			clienteNewDto.complemento(),
+			clienteNewDto.bairro(),
+			clienteNewDto.cep(),
 			cliente,
 			cidade
 		);
 
 		cliente.getEnderecos().add(endereco);
-		cliente.getTelefones().addAll(clienteNewDto.getTelefones());
+		cliente.getTelefones().addAll(clienteNewDto.telefones());
 
 		return cliente;
 	}
 
-	public ClienteNewDTO mapToClienteNewDTO(Cliente cliente) {
-		return new ClienteNewDTO(
+	public ClienteNewDto mapToClienteNewDto(Cliente cliente) {
+		return new ClienteNewDto(
 			cliente.getId(),
 			cliente.getNome(),
 			cliente.getEmail(),
@@ -83,6 +81,7 @@ public class ClienteMapper {
 			cliente.getEnderecos().get(cliente.getEnderecos().size() - 1).getComplemento(),
 			cliente.getEnderecos().get(cliente.getEnderecos().size() - 1).getBairro(),
 			cliente.getEnderecos().get(cliente.getEnderecos().size() - 1).getCep(),
+			null,
 			cliente.getEnderecos().get(cliente.getEnderecos().size() - 1).getCidade().getId()
 		);
 	}
