@@ -24,14 +24,18 @@ import com.wsmarket.wsmarketbackend.security.utils.JWTUtil;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	private Environment environment;
+	private Environment _environment;
+	private UserDetailsService _userDetailsService;
+	private JWTUtil _jwtUtil;
 
-	@Autowired
-	private UserDetailsService userDetailsService;
-
-	@Autowired
-	private JWTUtil jwtUtil;
+	public SecurityConfig(
+		@Autowired Environment environment,
+		@Autowired UserDetailsService userDetailsService,
+		@Autowired JWTUtil jwtUtil) {
+		_environment = environment;
+		_userDetailsService = userDetailsService;
+		_jwtUtil = jwtUtil;
+	}
 	
 	private static final String[] PUBLIC_MATCHERS = {
 		"/swagger/**"
@@ -44,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		if(Arrays.asList(this.environment.getActiveProfiles()).contains("dev")) {
+		if(Arrays.asList(_environment.getActiveProfiles()).contains("dev")) {
 			http
 				.headers()
 				.frameOptions()
@@ -68,8 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.addFilter(new JWTAuthenticationFilter(
 				authenticationManager(),
-				this.jwtUtil)
-			);
+				_jwtUtil));
 
 		http
 			.sessionManagement()
@@ -81,8 +84,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		AuthenticationManagerBuilder authenticationBuilder
 	) throws Exception {
 		authenticationBuilder
-			.userDetailsService(this.userDetailsService)
-			.passwordEncoder(this.bCryptPasswordEncoder());
+			.userDetailsService(_userDetailsService)
+			.passwordEncoder(bCryptPasswordEncoder());
 	}
 
 	@Bean

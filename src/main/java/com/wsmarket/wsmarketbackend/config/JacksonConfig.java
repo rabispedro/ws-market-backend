@@ -3,6 +3,7 @@ package com.wsmarket.wsmarketbackend.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wsmarket.wsmarketbackend.domains.PagamentoComBoleto;
@@ -14,15 +15,14 @@ public class JacksonConfig {
 
 	@Bean
 	public Jackson2ObjectMapperBuilder objectMapperBuilder() {
-		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder() {
-			public void configure(ObjectMapper objectMapper) {
+		return new Jackson2ObjectMapperBuilder() {
+			@Override
+			public void configure(@NonNull ObjectMapper objectMapper) {
 				objectMapper.registerSubtypes(PagamentoComBoleto.class);
 				objectMapper.registerSubtypes(PagamentoComCartao.class);
 
 				super.configure(objectMapper);
-			};
+			}
 		};
-
-		return builder;
 	}
 }

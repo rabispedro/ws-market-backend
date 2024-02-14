@@ -6,13 +6,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.wsmarket.wsmarketbackend.services.DatabaseService;
+import com.wsmarket.wsmarketbackend.services.interfaces.IDatabaseService;
 
 @Configuration
 @Profile("hml")
 public class HomologEnvironmentConfig {
-	@Autowired
-	private DatabaseService databaseService;
+	private final IDatabaseService _databaseService;
+
+	public HomologEnvironmentConfig(@Autowired IDatabaseService databaseService) {
+		_databaseService = databaseService;
+	}
 
 	@Value("${spring.jpa.hibernate.ddl-auto}")
 	private String strategy;
@@ -23,7 +26,7 @@ public class HomologEnvironmentConfig {
 			return false;
 		}
 
-		this.databaseService.instantiateTestDatabase();
+		_databaseService.instantiateTestDatabase();
 
 		return true;
 	}

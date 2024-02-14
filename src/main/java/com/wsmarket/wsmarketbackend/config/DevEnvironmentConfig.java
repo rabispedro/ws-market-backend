@@ -8,13 +8,17 @@ import org.springframework.context.annotation.Profile;
 
 import com.wsmarket.wsmarketbackend.services.DatabaseService;
 import com.wsmarket.wsmarketbackend.services.MockEmailService;
-import com.wsmarket.wsmarketbackend.services.interfaces.EmailService;
+import com.wsmarket.wsmarketbackend.services.interfaces.IDatabaseService;
+import com.wsmarket.wsmarketbackend.services.interfaces.IEmailService;
 
 @Configuration
 @Profile("dev")
 public class DevEnvironmentConfig {
-	@Autowired
-	private DatabaseService databaseService;
+	private final IDatabaseService _databaseService;
+
+	public DevEnvironmentConfig(@Autowired IDatabaseService databaseService) {
+		_databaseService = databaseService;
+	}
 
 	@Value("${spring.jpa.hibernate.ddl-auto}")
 	private String strategy;
@@ -25,13 +29,13 @@ public class DevEnvironmentConfig {
 			return false;
 		}
 		
-		this.databaseService.instantiateTestDatabase();
+		_databaseService.instantiateTestDatabase();
 
 		return true;
 	}
 
 	@Bean
-	public EmailService emailService() {
-		return new MockEmailService();
+	public IEmailService emailService() {
+		return new MockEmailService(null, null);
 	}
 }
